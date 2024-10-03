@@ -1,15 +1,16 @@
-// import useHomePage from "./index.hooks.ts";
 import NavBar from "../../components/NavBar";
+import { Outlet } from "react-router-dom";
 
-const HomePage = (/*{user}: {user : UserInterface | null}*/) => {
-    // const {}: {} = useHomePage()
-
-    return <div>
-        <NavBar/>
-        <p>Hello from Home!</p>
+const HomePage = () => {
+  return (
+    <div>
+      <NavBar />
+      <p>Hello from Home!</p>
+      <Outlet />
     </div>
-}
+  );
+};
 
-HomePage.displayName = "HomePage"
+HomePage.displayName = "HomePage";
 
-export default HomePage
+export default HomePage;
