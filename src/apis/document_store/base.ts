@@ -17,11 +17,9 @@ import type { Configuration } from "./configuration";
 // @ts-ignore
 import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from "axios";
 import globalAxios from "axios";
+import { BASE_HOST } from "../host.ts";
 
-export const BASE_PATH = "http://localhost:8080/document_store".replace(
-  /\/+$/,
-  "",
-);
+export const BASE_PATH = `${BASE_HOST}/document_store`.replace(/\/+$/, "");
 
 /**
  *
