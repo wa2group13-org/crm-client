@@ -1,22 +1,36 @@
 import ContactForm from "../../components/ContactForm";
 import useCreateProfessionalPage from "./index.hook.ts";
+import ProfessionalForm from "../../components/ProfessionalForm";
 
 export default function CreateProfessionalPage() {
-  const { mutation } = useCreateProfessionalPage();
-
-  console.log(mutation.error);
+  const {
+    currentStep,
+    contact,
+    mutation,
+    onContactSubmit,
+    onContactCancel,
+    onProfessionalSubmit,
+    onProfessionalCancel,
+  } = useCreateProfessionalPage();
 
   return (
     <>
-      <ContactForm
-        isPending={mutation.isPending}
-        error={mutation.error}
-        onSubmit={async (data, event) => {
-          event?.preventDefault();
-          console.log(data);
-          mutation.mutate(data);
-        }}
-      />
+      {currentStep === "Contact" && (
+        <ContactForm
+          defaultContact={contact}
+          onCancel={onContactCancel}
+          onSubmit={onContactSubmit}
+        />
+      )}
+
+      {currentStep === "Professional" && (
+        <ProfessionalForm
+          onSubmit={onProfessionalSubmit}
+          onCancel={onProfessionalCancel}
+          isPending={mutation.isPending}
+          error={mutation.error}
+        />
+      )}
     </>
   );
 }

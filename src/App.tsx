@@ -3,7 +3,6 @@ import HomePage from "./pages/HomePage";
 import { useApp } from "./App.hooks.ts";
 import UserContext from "./contexts/userContext.ts";
 import ProfessionalPage from "./pages/ProfessionalPage";
-import { ProfessionalDTO } from "./apis/crm/api.ts";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ProfessionalsPage from "./pages/ProfessionalsPage";
 import CreateProfessionalPage from "./pages/CreateProfessionalPage";

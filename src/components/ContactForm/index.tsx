@@ -8,15 +8,11 @@ import {
   Divider,
   IconButton,
   InputAdornment,
-  MenuItem,
   TextField,
 } from "@mui/material";
 import { RemoveCircle } from "@mui/icons-material";
-import { Controller, SubmitHandler } from "react-hook-form";
-import {
-  CreateContactDTO,
-  CreateContactDTOCategoryEnum,
-} from "../../apis/crm/api.ts";
+import { SubmitHandler } from "react-hook-form";
+import { CreateContactDTO } from "../../apis/crm/api.ts";
 
 const slotProps = (onClick: () => void) => ({
   input: {
@@ -32,13 +28,15 @@ const slotProps = (onClick: () => void) => ({
 
 export default function ContactForm({
   onSubmit,
+  onCancel,
   isPending,
   error,
   defaultContact,
 }: {
   onSubmit: SubmitHandler<CreateContactDTO>;
-  isPending: boolean;
-  error: Error | null;
+  onCancel?: () => void;
+  isPending?: boolean;
+  error?: Error | null;
   defaultContact?: CreateContactDTO;
 }) {
   const {
@@ -48,7 +46,6 @@ export default function ContactForm({
     emailFields,
     telephoneFields,
     addressFields,
-    control,
   } = useContactForm(defaultContact);
 
   return (
@@ -83,29 +80,30 @@ export default function ContactForm({
         helperText={errors.ssn?.message}
         fullWidth={true}
       />
-      <Controller
-        control={control}
-        name={"category"}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            select={true}
-            label="Category"
-            placeholder="Category"
-            error={!!errors.category}
-            helperText={errors.category?.message}
-            fullWidth={true}
-          >
-            {Object.values(CreateContactDTOCategoryEnum).map((category) => (
-              <MenuItem key={category} value={category}>
-                {category}
-              </MenuItem>
-            ))}
-          </TextField>
-        )}
-      />
+      {/*<Controller*/}
+      {/*  control={control}*/}
+      {/*  name={"category"}*/}
+      {/*  render={({ field }) => (*/}
+      {/*    <TextField*/}
+      {/*      {...field}*/}
+      {/*      select={true}*/}
+      {/*      label="Category"*/}
+      {/*      placeholder="Category"*/}
+      {/*      error={!!errors.category}*/}
+      {/*      helperText={errors.category?.message}*/}
+      {/*      fullWidth={true}*/}
+      {/*    >*/}
+      {/*      {Object.values(CreateContactDTOCategoryEnum).map((category) => (*/}
+      {/*        <MenuItem key={category} value={category}>*/}
+      {/*          {category}*/}
+      {/*        </MenuItem>*/}
+      {/*      ))}*/}
+      {/*    </TextField>*/}
+      {/*  )}*/}
+      {/*/>*/}
 
       <Divider />
+      {errors.emails?.message && <p>{errors.emails.message}</p>}
       {emailFields.fields.map((field, index) => (
         <TextField
           key={field.id}
@@ -124,6 +122,7 @@ export default function ContactForm({
       </Button>
 
       <Divider />
+      {errors.telephones?.message && <p>{errors.telephones.message}</p>}
       {telephoneFields.fields.map((field, index) => (
         <TextField
           key={field.id}
@@ -144,6 +143,7 @@ export default function ContactForm({
       </Button>
 
       <Divider />
+      {errors.addresses?.message && <p>{errors.addresses.message}</p>}
       {addressFields.fields.map((field, index) => (
         <Card key={field.id}>
           <CardContent>
@@ -215,6 +215,9 @@ export default function ContactForm({
       <Divider />
 
       {error && <p>{error.message}</p>}
+      <Button onClick={onCancel} variant="contained">
+        Cancel
+      </Button>
       <Button type={"submit"} variant={"contained"} disabled={isPending}>
         Submit {isPending && <CircularProgress />}
       </Button>
