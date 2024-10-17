@@ -1,14 +1,11 @@
 import useProfessionalsPage from "./index.hooks.ts";
-import {
-  Pagination,
-  Table,
-  TableBody,
-  TablePagination,
-  TableRow,
-} from "@mui/material";
+import { Container, List, ListItemButton, Pagination } from "@mui/material";
+import ProfessionalItem from "../../components/ProfessionalItem";
+import { useNavigate } from "react-router-dom";
 
 export default function ProfessionalsPage() {
-  const { page, setPage, limit, professionals } = useProfessionalsPage();
+  const navigate = useNavigate();
+  const { page, setPage, professionals } = useProfessionalsPage();
 
   if (professionals.isPending) return <span>Loading...</span>;
 
@@ -16,15 +13,24 @@ export default function ProfessionalsPage() {
     return <span>Error: {professionals.error.message}</span>;
 
   return (
-    <>
-      {professionals.data.content?.map((p) => (
-        <TableRow key={p.id}>{JSON.stringify(p)}</TableRow>
-      ))}
+    <Container>
+      <List sx={{ width: "100%" }}>
+        {professionals.data.content?.map((p) => (
+          <ListItemButton
+            key={p.id}
+            onClick={() => navigate(`/ui/professionals/${p.id}`)}
+            sx={{ width: "100%" }}
+          >
+            <ProfessionalItem professional={p} style={{ width: "100%" }} />
+          </ListItemButton>
+        ))}
+      </List>
+
       <Pagination
         count={professionals.data.totalPages}
         page={page}
         onChange={(_, newPage) => setPage(newPage)}
       />
-    </>
+    </Container>
   );
 }

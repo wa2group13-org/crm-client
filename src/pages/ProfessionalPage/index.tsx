@@ -2,6 +2,7 @@ import useProfessionalPage from "../../components/PersonalInformation/index.hook
 import PersonalInformation from "../../components/PersonalInformation";
 import ProfessionalInformation from "../../components/ProfessionalInformation";
 import { useParams } from "react-router-dom";
+import { Container } from "@mui/material";
 
 export default function ProfessionalPage() {
   const { professionalId } = useParams();
@@ -15,9 +16,9 @@ export default function ProfessionalPage() {
     return <span>Error: {professional.error.message}</span>;
 
   return (
-    <>
+    <Container>
       <ProfessionalInformation professional={professional.data} />
       <PersonalInformation contact={professional.data.contact} />
-    </>
+    </Container>
   );
 }

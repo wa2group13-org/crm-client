@@ -1,6 +1,7 @@
 import ContactForm from "../../components/ContactForm";
 import useCreateProfessionalPage from "./index.hook.ts";
 import ProfessionalForm from "../../components/ProfessionalForm";
+import { Container } from "@mui/material";
 
 export default function CreateProfessionalPage() {
   const {
@@ -14,7 +15,7 @@ export default function CreateProfessionalPage() {
   } = useCreateProfessionalPage();
 
   return (
-    <>
+    <Container>
       {currentStep === "Contact" && (
         <ContactForm
           defaultContact={contact}
@@ -31,6 +32,6 @@ export default function CreateProfessionalPage() {
           error={mutation.error}
         />
       )}
-    </>
+    </Container>
   );
 }

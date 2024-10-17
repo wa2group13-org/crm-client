@@ -1,13 +1,13 @@
 import NavBar from "../../components/NavBar";
 import { Outlet } from "react-router-dom";
+import { Box } from "@mui/material";
 
 const HomePage = () => {
   return (
-    <div>
+    <Box>
       <NavBar />
-      <p>Hello from Home!</p>
       <Outlet />
-    </div>
+    </Box>
   );
 };
 
