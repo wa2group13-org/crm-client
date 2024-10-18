@@ -6,7 +6,9 @@ const HomePage = () => {
   return (
     <Box>
       <NavBar />
-      <Outlet />
+      <Box sx={{ my: 10 }}>
+        <Outlet />
+      </Box>
     </Box>
   );
 };

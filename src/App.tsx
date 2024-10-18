@@ -1,25 +1,25 @@
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import { useApp } from "./App.hooks.ts";
-import UserContext from "./contexts/userContext.ts";
 import ProfessionalPage from "./pages/ProfessionalPage";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ProfessionalsPage from "./pages/ProfessionalsPage";
 import CreateProfessionalPage from "./pages/CreateProfessionalPage";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { crmTheme } from "./theme/theme.ts";
+import UserContextProvider from "./contexts/userContext.tsx";
 
 const queryClient = new QueryClient();
 
 export function App() {
-  const { user } = useApp();
+  useApp();
 
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={crmTheme}>
         <CssBaseline>
-          <Router>
-            <UserContext.Provider value={user}>
+          <UserContextProvider>
+            <Router>
               <Routes>
                 <Route path="/ui" element={<HomePage />}>
                   <Route path="professionals" element={<ProfessionalsPage />} />
@@ -33,8 +33,8 @@ export function App() {
                   />
                 </Route>
               </Routes>
-            </UserContext.Provider>
-          </Router>
+            </Router>
+          </UserContextProvider>
         </CssBaseline>
       </ThemeProvider>
     </QueryClientProvider>
