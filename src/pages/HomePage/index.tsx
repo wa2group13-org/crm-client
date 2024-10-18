@@ -1,15 +1,18 @@
-// import useHomePage from "./index.hooks.ts";
 import NavBar from "../../components/NavBar";
+import { Outlet } from "react-router-dom";
+import { Box } from "@mui/material";
 
-const HomePage = (/*{user}: {user : UserInterface | null}*/) => {
-    // const {}: {} = useHomePage()
+const HomePage = () => {
+  return (
+    <Box>
+      <NavBar />
+      <Box sx={{ my: 10 }}>
+        <Outlet />
+      </Box>
+    </Box>
+  );
+};
 
-    return <div>
-        <NavBar/>
-        <p>Hello from Home!</p>
-    </div>
-}
+HomePage.displayName = "HomePage";
 
-HomePage.displayName = "HomePage"
-
-export default HomePage
+export default HomePage;

@@ -1,34 +1,41 @@
-'use strict'
+"use strict";
 
-import {useEffect, useState} from "react";
-import {api} from "./apis/connections.ts";
+import { useEffect } from "react";
 
 export interface UserInterface {
-    name: string,
-    loginUrl: string,
-    logoutUrl: string,
-    principal: never | null,
-    xsrfToken: string,
+  name: string;
+  loginUrl: string;
+  logoutUrl: string;
+  principal: never | null;
+  xsrfToken: string;
 }
 
 export function useApp() {
-    const [user, setUser] = useState<UserInterface | null>(null)
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const res = await api.get("/user",{
-                    withCredentials: true,
-                })
-                const user = await res.data as UserInterface
-                setUser(user)
-            } catch (error) {
-                setUser(null)
-            }
-        }
-        fetchUser().then()
-    }, []);
+  // Save the current location before exiting the website
+  // reload the previous one when coming back, e.g. after
+  // a login or logout we are brought to the previous page
+  // otherwise we would land back on the home page.
+  useEffect(() => {
+    const saveCurrentLocation = () => {
+      localStorage.setItem("currentLocation", window.location.href);
+    };
 
-    return {
-        user
+    const oldLocation = localStorage.getItem("currentLocation");
+    localStorage.removeItem("currentLocation");
+
+    if (
+      oldLocation &&
+      window.location.href !== oldLocation &&
+      window.location.pathname === "/ui"
+    ) {
+      window.location.href = oldLocation;
     }
+
+    window.addEventListener("beforeunload", saveCurrentLocation);
+
+    return () => {
+      window.removeEventListener("beforeunload", saveCurrentLocation);
+      saveCurrentLocation();
+    };
+  }, []);
 }

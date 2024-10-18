@@ -111,6 +111,24 @@ export interface OidcIdToken {
     'claims'?: { [key: string]: object; };
     /**
      * 
+     * @type {string}
+     * @memberof OidcIdToken
+     */
+    'subject'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcIdToken
+     */
+    'issuer'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcIdToken
+     */
+    'authenticationContextClass'?: string;
+    /**
+     * 
      * @type {Array<string>}
      * @memberof OidcIdToken
      */
@@ -121,6 +139,12 @@ export interface OidcIdToken {
      * @memberof OidcIdToken
      */
     'authenticatedAt'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcIdToken
+     */
+    'nonce'?: string;
     /**
      * 
      * @type {Array<string>}
@@ -147,28 +171,52 @@ export interface OidcIdToken {
     'authorizationCodeHash'?: string;
     /**
      * 
-     * @type {string}
+     * @type {AddressStandardClaim}
      * @memberof OidcIdToken
      */
-    'nonce'?: string;
+    'address'?: AddressStandardClaim;
     /**
      * 
      * @type {string}
      * @memberof OidcIdToken
      */
-    'subject'?: string;
+    'locale'?: string;
     /**
      * 
      * @type {string}
      * @memberof OidcIdToken
      */
-    'authenticationContextClass'?: string;
+    'zoneInfo'?: string;
     /**
      * 
      * @type {string}
      * @memberof OidcIdToken
      */
-    'issuer'?: string;
+    'fullName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcIdToken
+     */
+    'profile'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcIdToken
+     */
+    'preferredUsername'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcIdToken
+     */
+    'email'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcIdToken
+     */
+    'givenName'?: string;
     /**
      * 
      * @type {string}
@@ -235,54 +283,6 @@ export interface OidcIdToken {
      * @memberof OidcIdToken
      */
     'updatedAt'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcIdToken
-     */
-    'givenName'?: string;
-    /**
-     * 
-     * @type {AddressStandardClaim}
-     * @memberof OidcIdToken
-     */
-    'address'?: AddressStandardClaim;
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcIdToken
-     */
-    'locale'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcIdToken
-     */
-    'zoneInfo'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcIdToken
-     */
-    'fullName'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcIdToken
-     */
-    'profile'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcIdToken
-     */
-    'preferredUsername'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcIdToken
-     */
-    'email'?: string;
 }
 /**
  * 
@@ -328,6 +328,36 @@ export interface OidcUser {
     'name'?: string;
     /**
      * 
+     * @type {string}
+     * @memberof OidcUser
+     */
+    'subject'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcUser
+     */
+    'expiresAt'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcUser
+     */
+    'issuer'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcUser
+     */
+    'issuedAt'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcUser
+     */
+    'authenticationContextClass'?: string;
+    /**
+     * 
      * @type {Array<string>}
      * @memberof OidcUser
      */
@@ -338,6 +368,12 @@ export interface OidcUser {
      * @memberof OidcUser
      */
     'authenticatedAt'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcUser
+     */
+    'nonce'?: string;
     /**
      * 
      * @type {Array<string>}
@@ -364,40 +400,52 @@ export interface OidcUser {
     'authorizationCodeHash'?: string;
     /**
      * 
-     * @type {string}
+     * @type {AddressStandardClaim}
      * @memberof OidcUser
      */
-    'nonce'?: string;
+    'address'?: AddressStandardClaim;
     /**
      * 
      * @type {string}
      * @memberof OidcUser
      */
-    'subject'?: string;
+    'locale'?: string;
     /**
      * 
      * @type {string}
      * @memberof OidcUser
      */
-    'expiresAt'?: string;
+    'zoneInfo'?: string;
     /**
      * 
      * @type {string}
      * @memberof OidcUser
      */
-    'authenticationContextClass'?: string;
+    'fullName'?: string;
     /**
      * 
      * @type {string}
      * @memberof OidcUser
      */
-    'issuer'?: string;
+    'profile'?: string;
     /**
      * 
      * @type {string}
      * @memberof OidcUser
      */
-    'issuedAt'?: string;
+    'preferredUsername'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcUser
+     */
+    'email'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcUser
+     */
+    'givenName'?: string;
     /**
      * 
      * @type {string}
@@ -464,54 +512,6 @@ export interface OidcUser {
      * @memberof OidcUser
      */
     'updatedAt'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcUser
-     */
-    'givenName'?: string;
-    /**
-     * 
-     * @type {AddressStandardClaim}
-     * @memberof OidcUser
-     */
-    'address'?: AddressStandardClaim;
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcUser
-     */
-    'locale'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcUser
-     */
-    'zoneInfo'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcUser
-     */
-    'fullName'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcUser
-     */
-    'profile'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcUser
-     */
-    'preferredUsername'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcUser
-     */
-    'email'?: string;
 }
 /**
  * 
@@ -530,6 +530,60 @@ export interface OidcUserInfo {
      * @type {string}
      * @memberof OidcUserInfo
      */
+    'subject'?: string;
+    /**
+     * 
+     * @type {AddressStandardClaim}
+     * @memberof OidcUserInfo
+     */
+    'address'?: AddressStandardClaim;
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcUserInfo
+     */
+    'locale'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcUserInfo
+     */
+    'zoneInfo'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcUserInfo
+     */
+    'fullName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcUserInfo
+     */
+    'profile'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcUserInfo
+     */
+    'preferredUsername'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcUserInfo
+     */
+    'email'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcUserInfo
+     */
+    'givenName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcUserInfo
+     */
     'familyName'?: string;
     /**
      * 
@@ -591,60 +645,6 @@ export interface OidcUserInfo {
      * @memberof OidcUserInfo
      */
     'updatedAt'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcUserInfo
-     */
-    'givenName'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcUserInfo
-     */
-    'subject'?: string;
-    /**
-     * 
-     * @type {AddressStandardClaim}
-     * @memberof OidcUserInfo
-     */
-    'address'?: AddressStandardClaim;
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcUserInfo
-     */
-    'locale'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcUserInfo
-     */
-    'zoneInfo'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcUserInfo
-     */
-    'fullName'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcUserInfo
-     */
-    'profile'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcUserInfo
-     */
-    'preferredUsername'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OidcUserInfo
-     */
-    'email'?: string;
 }
 /**
  * 

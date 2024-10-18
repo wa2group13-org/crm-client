@@ -99,6 +99,12 @@ export interface PageDocumentMetadataDTO {
     'totalElements'?: number;
     /**
      * 
+     * @type {PageableObject}
+     * @memberof PageDocumentMetadataDTO
+     */
+    'pageable'?: PageableObject;
+    /**
+     * 
      * @type {number}
      * @memberof PageDocumentMetadataDTO
      */
@@ -123,6 +129,12 @@ export interface PageDocumentMetadataDTO {
     'sort'?: Array<SortObject>;
     /**
      * 
+     * @type {number}
+     * @memberof PageDocumentMetadataDTO
+     */
+    'numberOfElements'?: number;
+    /**
+     * 
      * @type {boolean}
      * @memberof PageDocumentMetadataDTO
      */
@@ -133,18 +145,6 @@ export interface PageDocumentMetadataDTO {
      * @memberof PageDocumentMetadataDTO
      */
     'last'?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof PageDocumentMetadataDTO
-     */
-    'numberOfElements'?: number;
-    /**
-     * 
-     * @type {PageableObject}
-     * @memberof PageDocumentMetadataDTO
-     */
-    'pageable'?: PageableObject;
     /**
      * 
      * @type {boolean}
@@ -163,18 +163,6 @@ export interface PageableObject {
      * @type {number}
      * @memberof PageableObject
      */
-    'offset'?: number;
-    /**
-     * 
-     * @type {Array<SortObject>}
-     * @memberof PageableObject
-     */
-    'sort'?: Array<SortObject>;
-    /**
-     * 
-     * @type {number}
-     * @memberof PageableObject
-     */
     'pageNumber'?: number;
     /**
      * 
@@ -182,6 +170,18 @@ export interface PageableObject {
      * @memberof PageableObject
      */
     'pageSize'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PageableObject
+     */
+    'offset'?: number;
+    /**
+     * 
+     * @type {Array<SortObject>}
+     * @memberof PageableObject
+     */
+    'sort'?: Array<SortObject>;
     /**
      * 
      * @type {boolean}

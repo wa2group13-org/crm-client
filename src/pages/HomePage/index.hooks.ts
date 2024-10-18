@@ -1,6 +1,5 @@
-'use strict'
+"use strict";
 
 export default function useHomePage() {
-
-    return {}
+  return {};
 }
