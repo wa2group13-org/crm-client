@@ -16,7 +16,7 @@ export default function ProfessionalPage() {
     return <span>Error: {professional.error.message}</span>;
 
   return (
-    <Container>
+    <Container sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
       <ProfessionalInformation professional={professional.data} />
       <PersonalInformation contact={professional.data.contact} />
     </Container>

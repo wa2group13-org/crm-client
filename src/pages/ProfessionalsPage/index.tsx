@@ -1,5 +1,13 @@
 import useProfessionalsPage from "./index.hooks.ts";
-import { Container, List, ListItemButton, Pagination } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  List,
+  ListItemButton,
+  Pagination,
+  Typography,
+} from "@mui/material";
 import ProfessionalItem from "../../components/ProfessionalItem";
 import { useNavigate } from "react-router-dom";
 
@@ -14,6 +22,18 @@ export default function ProfessionalsPage() {
 
   return (
     <Container>
+      <Box sx={{ display: "flex", mb: 2 }}>
+        <Typography variant="h3" sx={{ flexGrow: 1 }}>
+          Professionals
+        </Typography>
+        <Button
+          variant="contained"
+          sx={{ flexGrow: 0 }}
+          onClick={() => navigate("/ui/professionals/create")}
+        >
+          Add professional
+        </Button>
+      </Box>
       <List sx={{ width: "100%" }}>
         {professionals.data.content?.map((p) => (
           <ListItemButton

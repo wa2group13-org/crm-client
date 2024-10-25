@@ -2,7 +2,6 @@ import {
   ProfessionalDTO,
   ProfessionalDTOEmploymentStateEnum,
 } from "../../apis/crm/api.ts";
-import useProfessionalInformation from "./index.hook.ts";
 import {
   Box,
   Card,
@@ -10,12 +9,14 @@ import {
   CardHeader,
   Chip,
   Table,
+  TableBody,
   TableCell,
   TableRow,
   Typography,
 } from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle";
 import React from "react";
+import { moneyFormat } from "../../utils/moneyFormat.ts";
 
 function colorFromEmploymentState(
   state: ProfessionalDTOEmploymentStateEnum,
@@ -35,8 +36,6 @@ export default function ProfessionalInformation({
 }: {
   professional: ProfessionalDTO;
 }) {
-  const {} = useProfessionalInformation();
-
   return (
     <Card>
       <CardHeader
@@ -44,46 +43,53 @@ export default function ProfessionalInformation({
       />
       <CardContent>
         <Table>
-          <TableRow>
-            <TableLabel>Daily rate</TableLabel>
-            <TableCell>
-              <Typography>{`${professional.dailyRate} €/day`}</Typography>
-            </TableCell>
-          </TableRow>
+          <TableBody>
+            <TableRow>
+              <TableLabel>Daily rate</TableLabel>
+              <TableCell>
+                <Typography>{`${moneyFormat.format(professional.dailyRate)} / Day`}</Typography>
+              </TableCell>
+            </TableRow>
 
-          <TableRow>
-            <TableLabel>Current employment state</TableLabel>
-            <TableCell>
-              <Box sx={{ display: "flex" }}>
-                <CircleIcon
+            <TableRow>
+              <TableLabel>Current employment state</TableLabel>
+              <TableCell>
+                <Box sx={{ display: "flex" }}>
+                  <CircleIcon
+                    sx={{
+                      color: colorFromEmploymentState(
+                        professional.employmentState,
+                      ),
+                    }}
+                  />{" "}
+                  <Typography>{professional.employmentState}</Typography>
+                </Box>
+              </TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableLabel>Skills</TableLabel>
+              <TableCell>
+                <Box
                   sx={{
-                    color: colorFromEmploymentState(
-                      professional.employmentState,
-                    ),
+                    display: "flex",
+                    flexDirection: "row",
+                    flexWrap: "wrap",
+                    gap: 2,
                   }}
-                />{" "}
-                <Typography>{professional.employmentState}</Typography>
-              </Box>
-            </TableCell>
-          </TableRow>
+                >
+                  {[...professional.skills].map((skill) => (
+                    <SingleSkill key={skill} skill={skill} />
+                  ))}
+                </Box>
+              </TableCell>
+            </TableRow>
 
-          <TableRow>
-            <TableLabel>Skills</TableLabel>
-            <TableCell>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  flexWrap: "wrap",
-                  gap: 2,
-                }}
-              >
-                {[...professional.skills].map((skill) => (
-                  <SingleSkill key={skill} skill={skill} />
-                ))}
-              </Box>
-            </TableCell>
-          </TableRow>
+            <TableRow>
+              <TableLabel>Notes</TableLabel>
+              <TableCell>{professional.notes}</TableCell>
+            </TableRow>
+          </TableBody>
         </Table>
       </CardContent>
     </Card>
