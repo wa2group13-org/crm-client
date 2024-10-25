@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 
 export default function NavBar() {
-  const { user, onLogin, pages } = useNavBar();
+  const { user, onLogin, pages, menuSettings } = useNavBar();
 
   return (
     <AppBar>
@@ -27,7 +27,9 @@ export default function NavBar() {
 
         <NavBarXs pages={pages} />
 
-        {user?.principal && <ProfileAvatar settings={[]} user={user} />}
+        {user?.principal && (
+          <ProfileAvatar settings={menuSettings} user={user} />
+        )}
 
         {user?.principal === null && (
           <Box sx={{ flexGrow: 0 }}>
@@ -167,7 +169,7 @@ function ProfileAvatar({
   settings,
   user,
 }: {
-  settings: string[];
+  settings: { label: string; onClick: () => void }[];
   user: UserDTO;
 }) {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -204,8 +206,16 @@ function ProfileAvatar({
         onClose={handleCloseUserMenu}
       >
         {settings.map((setting) => (
-          <MenuItem key={setting} onClick={handleCloseUserMenu}>
-            <Typography sx={{ textAlign: "center" }}>{setting}</Typography>
+          <MenuItem
+            key={setting.label}
+            onClick={() => {
+              setting.onClick();
+              handleCloseUserMenu();
+            }}
+          >
+            <Typography sx={{ textAlign: "center" }}>
+              {setting.label}
+            </Typography>
           </MenuItem>
         ))}
 
