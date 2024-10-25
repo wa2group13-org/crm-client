@@ -5,6 +5,7 @@ import {
 import { Avatar, Box, Chip, Typography } from "@mui/material";
 import React from "react";
 import useProfessionalItem from "./index.hook.ts";
+import { moneyFormat } from "../../utils/moneyFormat.ts";
 
 export default function ProfessionalItem({
   professional,
@@ -17,26 +18,30 @@ export default function ProfessionalItem({
 
   return (
     <Box style={style}>
-      <Box sx={{ display: "flex", flexDirection: "row" }}>
+      <Box sx={{ display: "flex", flexDirection: "row", gap: 2 }}>
         <Avatar>{avatarString}</Avatar>
 
-        <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
-          <Box sx={{ display: "flex" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+            gap: 2,
+          }}
+        >
+          <Box sx={{ display: "flex", gap: 2 }}>
             <Typography variant="h5">{`${professional.contact.name} ${professional.contact.surname}`}</Typography>
 
             <ProfessionalState state={professional.employmentState} />
 
             <Typography variant="h5" sx={{ marginLeft: "auto" }}>
-              {`${new Intl.NumberFormat(navigator.languages[0], {
-                style: "currency",
-                currency: "EUR",
-              }).format(professional.dailyRate)}/Day`}
+              {`${moneyFormat.format(professional.dailyRate)}/Day`}
             </Typography>
           </Box>
 
           <SkillsList
             skills={professional.skills}
-            style={{ display: "flex", flexWrap: "wrap" }}
+            style={{ display: "flex", flexWrap: "wrap", gap: 2 }}
           />
         </Box>
       </Box>

@@ -8,19 +8,23 @@ import {
   Box,
   Button,
   CircularProgress,
+  Divider,
+  Grid2,
   IconButton,
   InputAdornment,
   MenuItem,
   TextField,
+  Typography,
 } from "@mui/material";
-import { RemoveCircle } from "@mui/icons-material";
+import { Delete } from "@mui/icons-material";
+import ErrorText from "../ErrorText";
 
 const slotProps = (onClick: () => void) => ({
   input: {
     endAdornment: (
       <InputAdornment position={"end"}>
         <IconButton onClick={onClick}>
-          <RemoveCircle />
+          <Delete />
         </IconButton>
       </InputAdornment>
     ),
@@ -61,86 +65,103 @@ export default function ProfessionalForm({
         label="Notes"
         placeholder="Notes"
         type="text"
+        multiline
         error={!!errors.notes}
         helperText={errors.notes?.message}
         fullWidth={true}
       />
 
-      <TextField
-        {...register("dailyRate", { valueAsNumber: true })}
-        label="Daily Rate"
-        placeholder="Daily Rate"
-        type="number"
-        slotProps={{
-          htmlInput: {
-            type: "number",
-            min: 0.0,
-            step: 0.01,
-          },
-        }}
-        error={!!errors.dailyRate}
-        helperText={errors.dailyRate?.message}
-        fullWidth={true}
-      />
-
-      <Controller
-        control={control}
-        name="employmentState"
-        render={({ field }) => (
+      <Grid2 container spacing={2}>
+        <Grid2 size={{ xs: 12, md: 6 }}>
           <TextField
-            {...field}
-            select={true}
-            label="Employment state"
-            placeholder="Employment state"
-            error={!!errors.employmentState}
-            helperText={errors.employmentState?.message}
+            {...register("dailyRate", { valueAsNumber: true })}
+            label="Daily Rate"
+            placeholder="Daily Rate"
+            type="number"
+            slotProps={{
+              htmlInput: {
+                type: "number",
+                min: 0.0,
+                step: 0.01,
+              },
+            }}
+            error={!!errors.dailyRate}
+            helperText={errors.dailyRate?.message}
             fullWidth={true}
-          >
-            {Object.values(CreateProfessionalDTOEmploymentStateEnum).map(
-              (state) => (
-                <MenuItem key={state} value={state}>
-                  {state}
-                </MenuItem>
-              ),
-            )}
-          </TextField>
-        )}
-      />
-
-      {errors.skills && <p>{errors.skills?.message}</p>}
-      <Box sx={{ display: "flex" }}>
-        {skillFields.fields.map((field, index) => (
-          <TextField
-            {...register(`skills.${index}.value` as const)}
-            key={field.id}
-            label="Skill"
-            placeholder="Skill"
-            error={!!errors.skills?.[index]?.value}
-            helperText={errors.skills?.[index]?.value?.message}
-            slotProps={slotProps(() => skillFields.remove(index))}
           />
+        </Grid2>
+
+        <Grid2 size={{ xs: 12, md: 6 }}>
+          <Controller
+            control={control}
+            name="employmentState"
+            render={({ field }) => (
+              <TextField
+                {...field}
+                select={true}
+                label="Employment state"
+                placeholder="Employment state"
+                error={!!errors.employmentState}
+                helperText={errors.employmentState?.message}
+                fullWidth={true}
+              >
+                {Object.values(CreateProfessionalDTOEmploymentStateEnum).map(
+                  (state) => (
+                    <MenuItem key={state} value={state}>
+                      {state}
+                    </MenuItem>
+                  ),
+                )}
+              </TextField>
+            )}
+          />
+        </Grid2>
+      </Grid2>
+
+      <Typography variant="h6">Skills</Typography>
+      <Divider />
+      <ErrorText text={errors.skills?.root?.message} />
+      <Grid2 container spacing={2}>
+        {skillFields.fields.map((field, index) => (
+          <Grid2 key={field.id} size={6}>
+            <TextField
+              {...register(`skills.${index}.value` as const)}
+              label="Skill"
+              placeholder="Skill"
+              error={!!errors.skills?.[index]?.value}
+              helperText={errors.skills?.[index]?.value?.message}
+              slotProps={slotProps(() => skillFields.remove(index))}
+              fullWidth
+            />
+          </Grid2>
         ))}
+      </Grid2>
+
+      <Box sx={{ display: "flex", justifyContent: "end" }}>
+        <Button
+          onClick={() =>
+            skillFields.append({
+              value: "",
+            })
+          }
+        >
+          Add skill
+        </Button>
       </Box>
 
-      <Button
-        onClick={() =>
-          skillFields.append({
-            value: "",
-          })
-        }
-      >
-        Add skill
-      </Button>
+      <Divider />
 
-      {error && <p>{error.message}</p>}
+      <ErrorText text={error?.message} />
 
-      <Button onClick={onCancel} variant="contained">
-        Cancel
-      </Button>
+      <Box sx={{ display: "flex", justifyContent: "end", gap: 2 }}>
+        <Button onClick={onCancel} variant="outlined">
+          Cancel
+        </Button>
 
-      <Button type="submit" variant="contained" disabled={isPending}>
-        Submit {isPending && <CircularProgress />}
-      </Button>
+        <Button type="submit" variant="contained" disabled={isPending}>
+          Submit {isPending && <CircularProgress />}
+        </Button>
+      </Box>
     </form>
   );
 }

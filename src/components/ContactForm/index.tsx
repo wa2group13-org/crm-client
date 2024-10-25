@@ -1,25 +1,26 @@
 import useContactForm from "./index.hook.ts";
 import {
+  Box,
   Button,
-  Card,
-  CardActions,
-  CardContent,
   CircularProgress,
   Divider,
+  Grid2,
   IconButton,
   InputAdornment,
   TextField,
+  Typography,
 } from "@mui/material";
-import { RemoveCircle } from "@mui/icons-material";
+import { Delete } from "@mui/icons-material";
 import { SubmitHandler } from "react-hook-form";
 import { CreateContactDTO } from "../../apis/crm/api.ts";
+import ErrorText from "../ErrorText";
 
 const slotProps = (onClick: () => void) => ({
   input: {
     endAdornment: (
       <InputAdornment position={"end"}>
         <IconButton onClick={onClick}>
-          <RemoveCircle />
+          <Delete />
         </IconButton>
       </InputAdornment>
     ),
@@ -49,178 +50,196 @@ export default function ContactForm({
   } = useContactForm(defaultContact);
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      style={{ display: "flex", flexDirection: "column", gap: 18 }}
-    >
-      <TextField
-        {...register("name")}
-        label="Name"
-        type="text"
-        placeholder="Name"
-        error={!!errors.name}
-        helperText={errors.name?.message}
-        fullWidth={true}
-      />
-      <TextField
-        {...register("surname")}
-        type="text"
-        label="Surname"
-        placeholder="Surname"
-        error={!!errors.surname}
-        helperText={errors.surname?.message}
-        fullWidth={true}
-      />
-      <TextField
-        {...register("ssn")}
-        type="text"
-        label="SSN"
-        placeholder="SSN"
-        error={!!errors.ssn}
-        helperText={errors.ssn?.message}
-        fullWidth={true}
-      />
-      {/*<Controller*/}
-      {/*  control={control}*/}
-      {/*  name={"category"}*/}
-      {/*  render={({ field }) => (*/}
-      {/*    <TextField*/}
-      {/*      {...field}*/}
-      {/*      select={true}*/}
-      {/*      label="Category"*/}
-      {/*      placeholder="Category"*/}
-      {/*      error={!!errors.category}*/}
-      {/*      helperText={errors.category?.message}*/}
-      {/*      fullWidth={true}*/}
-      {/*    >*/}
-      {/*      {Object.values(CreateContactDTOCategoryEnum).map((category) => (*/}
-      {/*        <MenuItem key={category} value={category}>*/}
-      {/*          {category}*/}
-      {/*        </MenuItem>*/}
-      {/*      ))}*/}
-      {/*    </TextField>*/}
-      {/*  )}*/}
-      {/*/>*/}
-
-      <Divider />
-      {errors.emails?.message && <p>{errors.emails.message}</p>}
-      {emailFields.fields.map((field, index) => (
-        <TextField
-          key={field.id}
-          {...register(`emails.${index}.email` as const)}
-          type="email"
-          placeholder="Email"
-          error={!!(errors.emails && errors.emails[index]?.email)}
-          helperText={errors.emails && errors.emails[index]?.email?.message}
-          slotProps={slotProps(() => emailFields.remove(index))}
-          fullWidth={true}
-        />
-      ))}
-
-      <Button onClick={() => emailFields.append({ email: "" })}>
-        Add email
-      </Button>
-
-      <Divider />
-      {errors.telephones?.message && <p>{errors.telephones.message}</p>}
-      {telephoneFields.fields.map((field, index) => (
-        <TextField
-          key={field.id}
-          {...register(`telephones.${index}.number` as const)}
-          type="tel"
-          placeholder="Telephone"
-          error={!!(errors.telephones && errors.telephones[index]?.number)}
-          helperText={
-            errors.telephones && errors.telephones[index]?.number?.message
-          }
-          slotProps={slotProps(() => telephoneFields.remove(index))}
-          fullWidth={true}
-        />
-      ))}
-
-      <Button onClick={() => telephoneFields.append({ number: "" })}>
-        Add telephone
-      </Button>
-
-      <Divider />
-      {errors.addresses?.message && <p>{errors.addresses.message}</p>}
-      {addressFields.fields.map((field, index) => (
-        <Card key={field.id}>
-          <CardContent>
-            <TextField
-              {...register(`addresses.${index}.street` as const)}
-              type="text"
-              placeholder="Street"
-              error={!!(errors.addresses && errors.addresses[index]?.street)}
-              helperText={
-                errors.addresses && errors.addresses[index]?.street?.message
-              }
-              fullWidth={true}
-            />
-            <TextField
-              {...register(`addresses.${index}.civic` as const)}
-              type="text"
-              placeholder="Civic"
-              error={!!(errors.addresses && errors.addresses[index]?.civic)}
-              helperText={
-                errors.addresses && errors.addresses[index]?.civic?.message
-              }
-              fullWidth={true}
-            />
-            <TextField
-              {...register(`addresses.${index}.city` as const)}
-              type="text"
-              placeholder="City"
-              error={!!(errors.addresses && errors.addresses[index]?.city)}
-              helperText={
-                errors.addresses && errors.addresses[index]?.city?.message
-              }
-              fullWidth={true}
-            />
-            <TextField
-              {...register(`addresses.${index}.postalCode` as const)}
-              type="text"
-              placeholder="Postal code"
-              error={
-                !!(errors.addresses && errors.addresses[index]?.postalCode)
-              }
-              helperText={
-                errors.addresses && errors.addresses[index]?.postalCode?.message
-              }
-              fullWidth={true}
-            />
-          </CardContent>
-
-          <CardActions>
-            <Button onClick={() => addressFields.remove(index)}>
-              Remove address
-            </Button>
-          </CardActions>
-        </Card>
-      ))}
-
-      <Button
-        onClick={() =>
-          addressFields.append({
-            street: "",
-            civic: "",
-            city: "",
-            postalCode: "",
-          })
-        }
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Box
+        sx={{ display: "flex", flexDirection: "column", gap: 2, width: "100%" }}
       >
-        Add address
-      </Button>
+        <Grid2 container spacing={2}>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <TextField
+              {...register("name")}
+              label="Name"
+              type="text"
+              placeholder="Name"
+              error={!!errors.name}
+              helperText={errors.name?.message}
+              fullWidth={true}
+            />
+          </Grid2>
 
-      <Divider />
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <TextField
+              {...register("surname")}
+              type="text"
+              label="Surname"
+              placeholder="Surname"
+              error={!!errors.surname}
+              helperText={errors.surname?.message}
+              fullWidth={true}
+            />
+          </Grid2>
+        </Grid2>
 
-      {error && <p>{error.message}</p>}
-      <Button onClick={onCancel} variant="contained">
-        Cancel
-      </Button>
-      <Button type={"submit"} variant={"contained"} disabled={isPending}>
-        Submit {isPending && <CircularProgress />}
-      </Button>
+        <TextField
+          {...register("ssn")}
+          type="text"
+          label="SSN"
+          placeholder="SSN"
+          error={!!errors.ssn}
+          helperText={errors.ssn?.message}
+          fullWidth={true}
+        />
+
+        <Typography variant="h6">Emails</Typography>
+        <Divider />
+        <ErrorText text={errors.emails?.root?.message} />
+        {emailFields.fields.map((field, index) => (
+          <TextField
+            key={field.id}
+            {...register(`emails.${index}.email` as const)}
+            type="email"
+            placeholder="Email"
+            error={!!(errors.emails && errors.emails[index]?.email)}
+            helperText={errors.emails && errors.emails[index]?.email?.message}
+            slotProps={slotProps(() => emailFields.remove(index))}
+            fullWidth={true}
+          />
+        ))}
+
+        <Box sx={{ display: "flex", justifyContent: "end" }}>
+          <Button onClick={() => emailFields.append({ email: "" })}>
+            Add email
+          </Button>
+        </Box>
+
+        <Typography variant="h6">Telephones</Typography>
+        <Divider />
+        <ErrorText text={errors.telephones?.root?.message} />
+        {telephoneFields.fields.map((field, index) => (
+          <TextField
+            key={field.id}
+            {...register(`telephones.${index}.number` as const)}
+            type="tel"
+            placeholder="Telephone"
+            error={!!(errors.telephones && errors.telephones[index]?.number)}
+            helperText={
+              errors.telephones && errors.telephones[index]?.number?.message
+            }
+            slotProps={slotProps(() => telephoneFields.remove(index))}
+            fullWidth={true}
+          />
+        ))}
+
+        <Box sx={{ display: "flex", justifyContent: "end" }}>
+          <Button onClick={() => telephoneFields.append({ number: "" })}>
+            Add telephone
+          </Button>
+        </Box>
+
+        <Typography variant="h6">Addresses</Typography>
+        <Divider />
+        <ErrorText text={errors.addresses?.root?.message} />
+        {addressFields.fields.map((field, index) => (
+          <Box key={field.id}>
+            <Grid2 container spacing={2}>
+              <Grid2 size={{ xs: 10, md: 6 }}>
+                <TextField
+                  {...register(`addresses.${index}.street` as const)}
+                  type="text"
+                  label="Street"
+                  placeholder="Street"
+                  error={
+                    !!(errors.addresses && errors.addresses[index]?.street)
+                  }
+                  helperText={
+                    errors.addresses && errors.addresses[index]?.street?.message
+                  }
+                  fullWidth
+                />
+              </Grid2>
+
+              <Grid2 size={2}>
+                <TextField
+                  {...register(`addresses.${index}.civic` as const)}
+                  type="text"
+                  label="Civic"
+                  placeholder="Civic"
+                  error={!!(errors.addresses && errors.addresses[index]?.civic)}
+                  helperText={
+                    errors.addresses && errors.addresses[index]?.civic?.message
+                  }
+                  fullWidth
+                />
+              </Grid2>
+
+              <Grid2 size={{ xs: 12, md: 4 }}>
+                <TextField
+                  {...register(`addresses.${index}.postalCode` as const)}
+                  type="text"
+                  label="Postal code"
+                  placeholder="Postal code"
+                  error={
+                    !!(errors.addresses && errors.addresses[index]?.postalCode)
+                  }
+                  helperText={
+                    errors.addresses &&
+                    errors.addresses[index]?.postalCode?.message
+                  }
+                  fullWidth
+                />
+              </Grid2>
+
+              <Grid2 size={6}>
+                <TextField
+                  {...register(`addresses.${index}.city` as const)}
+                  type="text"
+                  label="City"
+                  placeholder="City"
+                  error={!!(errors.addresses && errors.addresses[index]?.city)}
+                  helperText={
+                    errors.addresses && errors.addresses[index]?.city?.message
+                  }
+                  fullWidth
+                />
+              </Grid2>
+
+              <Grid2 size={2} sx={{ display: "grid", placeItems: "center" }}>
+                <IconButton onClick={() => addressFields.remove(index)}>
+                  <Delete />
+                </IconButton>
+              </Grid2>
+            </Grid2>
+          </Box>
+        ))}
+
+        <Box sx={{ display: "flex", justifyContent: "end" }}>
+          <Button
+            onClick={() =>
+              addressFields.append({
+                street: "",
+                civic: "",
+                city: "",
+                postalCode: "",
+              })
+            }
+          >
+            Add address
+          </Button>
+        </Box>
+
+        <Divider />
+
+        <ErrorText text={error?.message} />
+
+        <Box sx={{ display: "flex", justifyContent: "end", gap: 2 }}>
+          <Button onClick={onCancel} variant="outlined">
+            Cancel
+          </Button>
+          <Button type={"submit"} variant={"contained"} disabled={isPending}>
+            Submit {isPending && <CircularProgress />}
+          </Button>
+        </Box>
+      </Box>
     </form>
   );
 }

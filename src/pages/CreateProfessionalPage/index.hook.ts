@@ -9,16 +9,21 @@ import useMultipleForm from "../../hooks/useMultipleForm.ts";
 import { BaseSyntheticEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const FormSteps = {
+export const ProfessionalFormStepsEnum = {
   Contact: "Contact",
   Professional: "Professional",
+  Review: "Review",
 } as const;
 
-type FormStepsEnum = (typeof FormSteps)[keyof typeof FormSteps];
+export type ProfessionalFormStepsEnum =
+  (typeof ProfessionalFormStepsEnum)[keyof typeof ProfessionalFormStepsEnum];
 
 export default function useCreateProfessionalPage() {
   const professionalApi = new ProfessionalControllerApi();
   const [contact, setContact] = useState<CreateContactDTO | undefined>();
+  const [professional, setProfessional] = useState<
+    CreateProfessionalDTO | undefined
+  >();
   const navigate = useNavigate();
 
   const mutation = useMutation({
@@ -29,7 +34,9 @@ export default function useCreateProfessionalPage() {
     mutationKey: [PROFESSIONAL_KEY],
   });
 
-  const steps = useMultipleForm<FormStepsEnum>(Object.values(FormSteps));
+  const steps = useMultipleForm<ProfessionalFormStepsEnum>(
+    Object.values(ProfessionalFormStepsEnum),
+  );
 
   async function onContactSubmit(
     contact: CreateContactDTO,
@@ -46,6 +53,13 @@ export default function useCreateProfessionalPage() {
   ) {
     event?.preventDefault();
     professional.contactInfo = contact;
+    setProfessional(professional);
+    steps.nextStep();
+  }
+
+  async function onReviewSubmit() {
+    if (!professional) return;
+
     await mutation.mutateAsync(professional);
 
     // When finished go to the previous page.
@@ -60,13 +74,20 @@ export default function useCreateProfessionalPage() {
     steps.prevStep();
   }
 
+  function onReviewCancel() {
+    steps.prevStep();
+  }
+
   return {
     mutation,
     contact,
+    professional,
     currentStep: steps.current,
     onContactSubmit,
     onContactCancel,
     onProfessionalSubmit,
     onProfessionalCancel,
+    onReviewSubmit,
+    onReviewCancel,
   };
 }
