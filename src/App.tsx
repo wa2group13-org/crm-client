@@ -8,6 +8,7 @@ import CreateProfessionalPage from "./pages/CreateProfessionalPage";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { crmTheme } from "./theme/theme.ts";
 import UserContextProvider from "./contexts/userContext.tsx";
+import ProfilePage from "./pages/ProfilePage";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ export function App() {
                     path="professionals/create"
                     element={<CreateProfessionalPage />}
                   />
+                  <Route path="profile" element={<ProfilePage />} />
                 </Route>
               </Routes>
             </Router>

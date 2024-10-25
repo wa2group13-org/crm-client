@@ -19,5 +19,12 @@ export default function useNavBar() {
     },
   ];
 
-  return { user, onLogin, pages };
+  const menuSettings = [
+    {
+      label: "Profile",
+      onClick: () => navigate("/ui/profile"),
+    },
+  ];
+
+  return { user, onLogin, pages, menuSettings };
 }
