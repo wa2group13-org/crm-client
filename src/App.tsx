@@ -9,6 +9,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { crmTheme } from "./theme/theme.ts";
 import UserContextProvider from "./contexts/userContext.tsx";
 import ProfilePage from "./pages/ProfilePage";
+import CustomersPage from "./pages/CustomersPage";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ export function App() {
                     path="professionals/create"
                     element={<CreateProfessionalPage />}
                   />
+                  <Route path="customers" element={<CustomersPage />} />
                   <Route path="profile" element={<ProfilePage />} />
                 </Route>
               </Routes>

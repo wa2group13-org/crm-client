@@ -17,6 +17,10 @@ export default function useNavBar() {
       name: "Professionals",
       navigate: () => navigate("/ui/professionals"),
     },
+    {
+      name: "Customers",
+      navigate: () => navigate("/ui/customers"),
+    },
   ];
 
   const menuSettings = [
