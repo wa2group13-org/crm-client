@@ -10,6 +10,7 @@ import { crmTheme } from "./theme/theme.ts";
 import UserContextProvider from "./contexts/userContext.tsx";
 import ProfilePage from "./pages/ProfilePage";
 import CustomersPage from "./pages/CustomersPage";
+import CreateCustomerPage from "./pages/CreateCustomerPage";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,10 @@ export function App() {
                     element={<CreateProfessionalPage />}
                   />
                   <Route path="customers" element={<CustomersPage />} />
+                  <Route
+                    path="customers/create"
+                    element={<CreateCustomerPage />}
+                  />
                   <Route path="profile" element={<ProfilePage />} />
                 </Route>
               </Routes>

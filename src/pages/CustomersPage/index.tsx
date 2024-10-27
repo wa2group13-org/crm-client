@@ -30,14 +30,14 @@ export default function CustomersPage() {
     <Container>
       <Box sx={{ display: "flex", mb: 2 }}>
         <Typography variant="h3" sx={{ flexGrow: 1 }}>
-          Professionals
+          Customers
         </Typography>
         <Button
           variant="contained"
           sx={{ flexGrow: 0 }}
-          onClick={() => navigate("/ui/professionals/create")}
+          onClick={() => navigate("/ui/customers/create")}
         >
-          Add professional
+          Add customer
         </Button>
       </Box>
 
@@ -45,7 +45,7 @@ export default function CustomersPage() {
         {customers.data.content?.map((customer) => (
           <ListItemButton
             key={customer.id}
-            onClick={() => navigate(`/ui/professionals/${customer.id}`)}
+            onClick={() => navigate(`/ui/customers/${customer.id}`)}
             sx={{ width: "100%" }}
           >
             <CustomerListItem customer={customer} style={{ width: "100%" }} />
@@ -53,7 +53,7 @@ export default function CustomersPage() {
         ))}
       </List>
 
-      <Box sx={{ display: "flex", justContent: "center" }}>
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Pagination
           count={customers.data.totalPages}
           page={page}

@@ -31,7 +31,7 @@ export default function useCustomersPage() {
   const customers = useQuery({
     queryKey: [CUSTOMERS_KEY, { page }],
     queryFn: async () => {
-      const res = await customerApi.getCustomers(page, limit);
+      const res = await customerApi.getCustomers(page - 1, limit);
       return res.data;
     },
   });

@@ -1,57 +1,55 @@
 import {
   CreateContactDTO,
-  CreateProfessionalDTO,
-  ProfessionalControllerApi,
+  CreateCustomerDTO,
+  CustomerControllerApi,
 } from "../../apis/crm/api.ts";
+import { BaseSyntheticEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { PROFESSIONAL_KEY } from "../../query/query-keys.ts";
 import useMultipleForm from "../../hooks/useMultipleForm.ts";
-import { BaseSyntheticEvent, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
-export const ProfessionalFormStepsEnum = {
+const CustomerFormStepsEnum = {
   Contact: "Contact",
-  Professional: "Professional",
+  Customer: "Customer",
   Review: "Review",
 } as const;
 
-export type ProfessionalFormStepsEnum =
-  (typeof ProfessionalFormStepsEnum)[keyof typeof ProfessionalFormStepsEnum];
+type CustomerFormStepsEnum =
+  (typeof CustomerFormStepsEnum)[keyof typeof CustomerFormStepsEnum];
 
-function stepLabel(step: ProfessionalFormStepsEnum): string {
+function stepLabel(step: CustomerFormStepsEnum): string {
   switch (step) {
     case "Contact":
       return "Contact information";
-    case "Professional":
-      return "Professional information";
+    case "Customer":
+      return "Customer information";
     case "Review":
       return "Review information";
   }
 }
 
-const stepsWithLabels = Object.values(ProfessionalFormStepsEnum).map((s) => ({
+const stepsWithLabels = Object.values(CustomerFormStepsEnum).map((s) => ({
   step: s,
   label: stepLabel(s),
 }));
 
-export default function useCreateProfessionalPage() {
-  const professionalApi = new ProfessionalControllerApi();
+export default function useCreateCustomerPage() {
+  const customerApi = new CustomerControllerApi();
   const [contact, setContact] = useState<CreateContactDTO | undefined>();
-  const [professional, setProfessional] = useState<
-    CreateProfessionalDTO | undefined
-  >();
+  const [customer, setCustomer] = useState<CreateCustomerDTO | undefined>();
   const navigate = useNavigate();
 
   const mutation = useMutation({
-    mutationFn: async (data: CreateProfessionalDTO) => {
-      const res = await professionalApi.createProfessional(data);
+    mutationFn: async (data: CreateCustomerDTO) => {
+      const res = await customerApi.createCustomer(data);
       return res.data;
     },
     mutationKey: [PROFESSIONAL_KEY],
   });
 
-  const steps = useMultipleForm<ProfessionalFormStepsEnum>(
-    Object.values(ProfessionalFormStepsEnum),
+  const steps = useMultipleForm<CustomerFormStepsEnum>(
+    Object.values(CustomerFormStepsEnum),
   );
 
   async function onContactSubmit(
@@ -63,20 +61,20 @@ export default function useCreateProfessionalPage() {
     steps.nextStep();
   }
 
-  async function onProfessionalSubmit(
-    professional: CreateProfessionalDTO,
+  async function onCustomerSubmit(
+    customer: CreateCustomerDTO,
     event?: BaseSyntheticEvent,
   ) {
     event?.preventDefault();
-    professional.contactInfo = contact;
-    setProfessional(professional);
+    customer.contactInfo = contact;
+    setCustomer(customer);
     steps.nextStep();
   }
 
   async function onReviewSubmit() {
-    if (!professional) return;
+    if (!customer) return;
 
-    await mutation.mutateAsync(professional);
+    await mutation.mutateAsync(customer);
 
     // When finished go to the previous page.
     navigate(-1);
@@ -86,7 +84,7 @@ export default function useCreateProfessionalPage() {
     navigate(-1);
   }
 
-  function onProfessionalCancel() {
+  function onCustomerCancel() {
     steps.prevStep();
   }
 
@@ -97,14 +95,14 @@ export default function useCreateProfessionalPage() {
   return {
     mutation,
     contact,
-    professional,
+    customer,
     currentStep: steps.current,
     currentStepIndex: steps.index,
     stepsWithLabels,
     onContactSubmit,
     onContactCancel,
-    onProfessionalSubmit,
-    onProfessionalCancel,
+    onCustomerSubmit,
+    onCustomerCancel,
     onReviewSubmit,
     onReviewCancel,
   };

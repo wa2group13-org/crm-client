@@ -15,9 +15,9 @@ export default function CustomerListItem({
   return (
     <Box style={style}>
       <Box sx={{ display: "flex", flexDirection: "row", gap: 2 }}>
-        <Avatar>{avatarString}</Avatar>
+        <Avatar sx={{ mt: 1 }}>{avatarString}</Avatar>
 
-        <Box sx={{ display: "flex", flexDirection: "row", gap: 2 }}>
+        <Box sx={{ display: "flex", flexDirection: "column" }}>
           <Typography variant="h5">{`${customer.contact.name} ${customer.contact.surname}`}</Typography>
 
           <Typography>Job offerings: {customer.jobOffers.length}</Typography>
