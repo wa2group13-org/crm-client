@@ -1,6 +1,6 @@
 import { ProfessionalControllerApi } from "../../apis/crm/api.ts";
 import { useQuery } from "@tanstack/react-query";
-import { PROFESSIONAL_KEY } from "../../query/query-keys.ts";
+import { professionalKey } from "../../query/query-keys.ts";
 import { useParams } from "react-router-dom";
 
 export default function useProfessionalPage() {
@@ -11,7 +11,7 @@ export default function useProfessionalPage() {
   const professionalApi = new ProfessionalControllerApi();
 
   const professional = useQuery({
-    queryKey: [PROFESSIONAL_KEY, { professionalIdNumber }],
+    queryKey: professionalKey(professionalIdNumber),
     queryFn: async () => {
       const res = await professionalApi.getProfessional(professionalIdNumber);
       return res.data;

@@ -2,7 +2,7 @@ import { useLocation, useSearchParams } from "react-router-dom";
 import { CustomerControllerApi } from "../../apis/crm/api.ts";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { CUSTOMERS_KEY } from "../../query/query-keys.ts";
+import { customersKey } from "../../query/query-keys.ts";
 
 export default function useCustomersPage() {
   const [searchParams, setSearchParams] = useSearchParams({ page: "1" });
@@ -29,7 +29,7 @@ export default function useCustomersPage() {
 
   // Fetch customers from the server
   const customers = useQuery({
-    queryKey: [CUSTOMERS_KEY, { page }],
+    queryKey: customersKey({ page, limit }),
     queryFn: async () => {
       const res = await customerApi.getCustomers(page - 1, limit);
       return res.data;
