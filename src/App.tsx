@@ -11,6 +11,7 @@ import UserContextProvider from "./contexts/userContext.tsx";
 import ProfilePage from "./pages/ProfilePage";
 import CustomersPage from "./pages/CustomersPage";
 import CreateCustomerPage from "./pages/CreateCustomerPage";
+import CustomerPage from "./pages/CustomerPage";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,10 @@ export function App() {
                     element={<CreateProfessionalPage />}
                   />
                   <Route path="customers" element={<CustomersPage />} />
+                  <Route
+                    path="customers/:customerId"
+                    element={<CustomerPage />}
+                  />
                   <Route
                     path="customers/create"
                     element={<CreateCustomerPage />}

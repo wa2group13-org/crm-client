@@ -1,14 +1,4 @@
-"use strict";
-
 import { useEffect } from "react";
-
-export interface UserInterface {
-  name: string;
-  loginUrl: string;
-  logoutUrl: string;
-  principal: never | null;
-  xsrfToken: string;
-}
 
 export function useApp() {
   // Save the current location before exiting the website
@@ -26,7 +16,7 @@ export function useApp() {
     if (
       oldLocation &&
       window.location.href !== oldLocation &&
-      window.location.pathname === "/ui"
+      window.location.pathname.startsWith("/ui")
     ) {
       window.location.href = oldLocation;
     }
