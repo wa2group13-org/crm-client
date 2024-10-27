@@ -1,32 +1,32 @@
-import ContactForm from "../../components/ContactForm";
-import useCreateProfessionalPage from "./index.hook.ts";
-import ProfessionalForm from "../../components/ProfessionalForm";
 import { Container } from "@mui/material";
-import ProfessionalReview from "../../components/ProfessionalReview";
 import CardWrapperForm from "../../components/CardWrapperForm";
+import useCreateCustomerPage from "./index.hook.ts";
+import ContactForm from "../../components/ContactForm";
+import CustomerForm from "../../components/CustomerForm";
+import CustomerReview from "../../components/CustomerReview";
 
-export default function CreateProfessionalPage() {
+export default function CreateCustomerPage() {
   const {
     currentStep,
     currentStepIndex,
     stepsWithLabels,
     contact,
-    professional,
+    customer,
     mutation,
     onContactSubmit,
     onContactCancel,
-    onProfessionalSubmit,
-    onProfessionalCancel,
+    onCustomerSubmit,
+    onCustomerCancel,
     onReviewSubmit,
     onReviewCancel,
-  } = useCreateProfessionalPage();
+  } = useCreateCustomerPage();
 
   return (
     <Container maxWidth="md">
       <CardWrapperForm
-        title="Create professional"
-        currentStepIndex={currentStepIndex}
+        title={"Create customer"}
         steps={stepsWithLabels}
+        currentStepIndex={currentStepIndex}
       >
         {currentStep === "Contact" && (
           <ContactForm
@@ -36,19 +36,24 @@ export default function CreateProfessionalPage() {
           />
         )}
 
-        {currentStep === "Professional" && (
-          <ProfessionalForm
-            defaultProfessional={professional}
-            onSubmit={onProfessionalSubmit}
-            onCancel={onProfessionalCancel}
+        {currentStep === "Customer" && (
+          <CustomerForm
+            defaultCustomer={customer}
+            onSubmit={onCustomerSubmit}
+            onCancel={onCustomerCancel}
             isPending={mutation.isPending}
             error={mutation.error}
           />
         )}
 
-        {currentStep === "Review" && professional && (
-          <ProfessionalReview
-            professional={professional}
+        {currentStep === "Review" && (
+          <CustomerReview
+            customer={
+              customer ??
+              (() => {
+                throw Error("Some customer information is missing!");
+              })()
+            }
             isLoading={mutation.isPending}
             error={mutation.error}
             onSubmit={onReviewSubmit}

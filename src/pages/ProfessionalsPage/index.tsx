@@ -10,15 +10,17 @@ import {
 } from "@mui/material";
 import ProfessionalItem from "../../components/ProfessionalItem";
 import { useNavigate } from "react-router-dom";
+import Loading from "../../components/Loading";
+import ErrorAlert from "../../components/ErrorAlert";
 
 export default function ProfessionalsPage() {
   const navigate = useNavigate();
   const { page, setPage, professionals } = useProfessionalsPage();
 
-  if (professionals.isPending) return <span>Loading...</span>;
+  if (professionals.isPending) return <Loading />;
 
   if (professionals.isError)
-    return <span>Error: {professionals.error.message}</span>;
+    return <ErrorAlert text={professionals.error.message} />;
 
   return (
     <Container>
@@ -46,11 +48,13 @@ export default function ProfessionalsPage() {
         ))}
       </List>
 
-      <Pagination
-        count={professionals.data.totalPages}
-        page={page}
-        onChange={(_, newPage) => setPage(newPage)}
-      />
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Pagination
+          count={professionals.data.totalPages}
+          page={page}
+          onChange={(_, newPage) => setPage(newPage)}
+        />
+      </Box>
     </Container>
   );
 }

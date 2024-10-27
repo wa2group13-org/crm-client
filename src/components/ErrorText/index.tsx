@@ -8,11 +8,10 @@ export default function ErrorText({
   text?: string | null;
   style?: CSSProperties;
 }) {
+  if (!text) return null;
   return (
-    text && (
-      <Typography style={style} color="error">
-        {text}
-      </Typography>
-    )
+    <Typography style={style} color="error">
+      {text}
+    </Typography>
   );
 }

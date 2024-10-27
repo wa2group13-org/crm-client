@@ -24,6 +24,7 @@ export default function useMultipleForm<T>(elements: T[]) {
 
   return {
     current,
+    index,
     nextStep,
     prevStep,
   };
