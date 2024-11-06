@@ -1,12 +1,21 @@
 import useCustomerPage from "./index.hook.ts";
 import Loading from "../../components/Loading";
-import { Alert, Card, CardContent, Container, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Container,
+  Typography,
+} from "@mui/material";
 import PersonalInformation from "../../components/PersonalInformation";
 import CustomerInformation from "../../components/CustomerInformation";
 import CustomerJobOfferInformation from "../../components/CustomerJobOfferInformation";
+import { Add } from "@mui/icons-material";
 
 export default function CustomerPage() {
-  const { customer, onJobOfferClick } = useCustomerPage();
+  const { customer, onJobOfferClick, onJobOfferAdd } = useCustomerPage();
 
   if (customer.isPending) return <Loading />;
 
@@ -25,9 +34,16 @@ export default function CustomerPage() {
           </Typography>
           <PersonalInformation contact={customer.data.contact} />
 
-          <Typography variant="h4" sx={{ mt: 4 }}>
-            Customer job offerings
-          </Typography>
+          <Box sx={{ display: "flex", gap: 2, alignItems: "center", mt: 4 }}>
+            <Typography variant="h4">Customer job offerings</Typography>
+            <Button
+              startIcon={<Add />}
+              variant="outlined"
+              onClick={onJobOfferAdd}
+            >
+              Create offer
+            </Button>
+          </Box>
           <CustomerJobOfferInformation
             customer={customer.data}
             onItemClick={onJobOfferClick}

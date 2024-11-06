@@ -12,7 +12,7 @@ export default function useNavBar() {
     window.location.href = user.loginUrl;
   }
 
-  const pages = [
+  const pages: { name: string; navigate: () => void }[] = [
     {
       name: "Professionals",
       navigate: () => navigate("/ui/professionals"),

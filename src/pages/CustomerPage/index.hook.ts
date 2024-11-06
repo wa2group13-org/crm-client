@@ -23,5 +23,14 @@ export default function useCustomerPage() {
     navigate(`/ui/jobs/${jobOffer.id}`);
   }
 
-  return { customerId: customerIdNumber, customer, onJobOfferClick };
+  function onJobOfferAdd() {
+    navigate("/ui/jobs/create", { state: { customer: customer.data } });
+  }
+
+  return {
+    customerId: customerIdNumber,
+    customer,
+    onJobOfferClick,
+    onJobOfferAdd,
+  };
 }
