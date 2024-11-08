@@ -43,6 +43,7 @@ export default function useJobOfferPage() {
       const res = await professionalApi.getProfessional(professionalId);
       return res.data;
     },
+    enabled: !jobOffer.isPending,
   });
 
   const customerId = jobOffer.data?.customerId;

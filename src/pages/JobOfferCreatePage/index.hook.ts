@@ -11,7 +11,7 @@ import { BaseSyntheticEvent, useState } from "react";
 export default function useJobOfferCreatePage() {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { customer }: { customer?: CustomerDTO } = state;
+  const { customer }: { customer?: CustomerDTO } = state ?? {};
   const [jobOffer, setJobOffer] = useState<CreateJobOfferDTO | undefined>();
   const jobOfferApi = new JobOfferControllerApi();
 
