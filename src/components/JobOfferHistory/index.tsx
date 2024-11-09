@@ -16,8 +16,10 @@ import { OpenInNew } from "@mui/icons-material";
 
 export default function JobOfferHistory({
   history,
+  onProfessionalClick,
 }: {
   history: JobOfferHistoryDTO[];
+  onProfessionalClick: (professional: ProfessionalDTO) => void;
 }) {
   const { getProfessional } = useJobOfferHistory(history);
 
@@ -42,6 +44,7 @@ export default function JobOfferHistory({
               <ProfessionalCell
                 id={item.assignedProfessional ?? null}
                 getProfessional={getProfessional}
+                onProfessionalClick={onProfessionalClick}
               />
             </TableCell>
             <TableCell align="right">{item.note}</TableCell>
@@ -55,9 +58,11 @@ export default function JobOfferHistory({
 function ProfessionalCell({
   id,
   getProfessional,
+  onProfessionalClick,
 }: {
   id: number | null;
   getProfessional: (id: number) => UseQueryResult<ProfessionalDTO, Error>;
+  onProfessionalClick: (professional: ProfessionalDTO) => void;
 }) {
   if (id === null) return <>-</>;
 
@@ -69,7 +74,10 @@ function ProfessionalCell({
     return <ErrorAlert text={professional.error.message} />;
 
   return (
-    <Button endIcon={<OpenInNew />}>
+    <Button
+      onClick={() => onProfessionalClick(professional.data)}
+      endIcon={<OpenInNew />}
+    >
       {`${professional.data.contact.name} ${professional.data.contact.surname}`}
     </Button>
   );

@@ -1,24 +1,8 @@
-import {
-  CustomerDTO,
-  JobOfferDTO,
-  JobOfferDTOStatusEnum,
-} from "../../apis/crm/api.ts";
-import {
-  Box,
-  Chip,
-  Divider,
-  List,
-  ListItemButton,
-  Typography,
-} from "@mui/material";
+import { CustomerDTO, JobOfferDTO } from "../../apis/crm/api.ts";
+import { Box, Divider, List, ListItemButton, Typography } from "@mui/material";
 import { CSSProperties, Fragment } from "react";
-import {
-  CheckCircle,
-  Cancel,
-  OpenInNew,
-  Construction,
-  Checklist,
-} from "@mui/icons-material";
+import { OpenInNew } from "@mui/icons-material";
+import JobStateChip from "../JobStateChip";
 
 export default function CustomerJobOfferInformation({
   customer,
@@ -46,7 +30,7 @@ export default function CustomerJobOfferInformation({
               }}
             >
               <Typography>{job.description}</Typography>
-              <StateChip status={job.status} />
+              <JobStateChip status={job.status} />
             </Box>
 
             <OpenInNew sx={{ flexGrow: 0 }} />
@@ -56,39 +40,4 @@ export default function CustomerJobOfferInformation({
       ))}
     </List>
   );
-}
-
-function StateChip({ status }: { status: JobOfferDTOStatusEnum }) {
-  const color = (() => {
-    switch (status) {
-      case "Created":
-        return "primary";
-      case "Done":
-        return "success";
-      case "Aborted":
-        return "error";
-      case "CandidateProposal":
-      case "Consolidated":
-      case "SelectionPhase":
-        return "warning";
-    }
-  })();
-
-  const Icon = (() => {
-    switch (status) {
-      case "Created":
-        return OpenInNew;
-      case "Aborted":
-        return Cancel;
-      case "Done":
-        return CheckCircle;
-      case "CandidateProposal":
-      case "Consolidated":
-        return Construction;
-      case "SelectionPhase":
-        return Checklist;
-    }
-  })();
-
-  return <Chip color={color} icon={<Icon />} label={status} />;
 }

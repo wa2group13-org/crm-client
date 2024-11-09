@@ -1,4 +1,4 @@
-import { CustomerFilters } from "../apis/crm/api.ts";
+import { CustomerFilters, ProfessionalFilters } from "../apis/crm/api.ts";
 
 export const PROFESSIONAL_KEY = "professional_key";
 export const PROFESSIONALS_KEY = "professionals_key";
@@ -8,7 +8,11 @@ export const JOB_OFFERS_KEY = "job_offers_key";
 export const JOB_OFFER_KEY = "job_offer_key";
 export const USER_KEY = "user_key";
 
-export function professionalsKey(keys: { page?: number; limit?: number }) {
+export function professionalsKey(keys: {
+  page?: number;
+  limit?: number;
+  filters?: ProfessionalFilters;
+}) {
   return [PROFESSIONALS_KEY, keys];
 }
 
