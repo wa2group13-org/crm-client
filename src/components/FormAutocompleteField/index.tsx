@@ -4,7 +4,12 @@ import {
   FieldValues,
   UseControllerProps,
 } from "react-hook-form";
-import { Autocomplete, CircularProgress, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  CircularProgress,
+  debounce,
+  TextField,
+} from "@mui/material";
 
 export function FormAutocompleteField<
   TOption extends { id: string | number; label: string },
@@ -17,11 +22,13 @@ export function FormAutocompleteField<
   loading,
   label,
   onInputChange,
+  debounceTime,
 }: UseControllerProps<TFieldValues, TName> & {
   options: TOption[];
   loading?: boolean;
   label?: string;
   onInputChange?: (input: string) => void;
+  debounceTime?: number;
 }) {
   return (
     <Controller
@@ -34,15 +41,20 @@ export function FormAutocompleteField<
           <Autocomplete
             options={options}
             value={options.find((option) => option.id === value) ?? null}
+            getOptionLabel={(option) => option.label}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
             onChange={(_event, value) => onChange(value?.id)}
             disabled={disabled}
             loading={loading}
-            onInputChange={(_event, value) => onInputChange?.(value)}
+            onInputChange={debounce(
+              (_event, value) => onInputChange?.(value),
+              debounceTime,
+            )}
+            onBlur={onBlur}
             renderInput={(params) => (
               <TextField
                 {...params}
                 inputRef={ref}
-                onBlur={onBlur}
                 label={label}
                 placeholder={label}
                 name={name}

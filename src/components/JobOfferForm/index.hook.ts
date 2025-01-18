@@ -12,7 +12,6 @@ import {
   schemaToJobOffer,
 } from "../../schemas/jobOfferSchema.ts";
 import { useState } from "react";
-import { useDebouncing } from "../../hooks/useDebouncing.ts";
 import { useQuery } from "@tanstack/react-query";
 import { customersKey } from "../../query/query-keys.ts";
 
@@ -25,7 +24,6 @@ export default function useJobOfferForm(
     customerOwner &&
       `${customerOwner.contact.name} ${customerOwner.contact.surname}`,
   );
-  const customerNameDebounced = useDebouncing(customerName, 1000);
 
   const {
     register,
@@ -50,11 +48,11 @@ export default function useJobOfferForm(
     queryKey: customersKey({
       page: 0,
       limit: 10,
-      filters: { byFullName: customerNameDebounced },
+      filters: { byFullName: customerName },
     }),
     queryFn: async () => {
       const res = await customerApi.getCustomers(0, 10, {
-        byFullName: customerNameDebounced,
+        byFullName: customerName,
       });
       return res.data;
     },
@@ -70,18 +68,20 @@ export default function useJobOfferForm(
     setCustomerName(name);
   }
 
+  const customers =
+    customersQuery.data?.content?.map((c) => ({
+      id: c.id,
+      label: `${c.contact.name} ${c.contact.surname}`,
+    })) ?? [];
+
   return {
     register,
     handleSubmit: handleSubmitConvert,
     control,
     watch,
     errors,
-    customers: customersQuery.data?.content?.map((c) => ({
-      id: c.id,
-      label: `${c.contact.name} ${c.contact.surname}`,
-    })),
-    customersPending:
-      customersQuery.isPending || customerName !== customerNameDebounced,
+    customers,
+    customersPending: customersQuery.isPending,
     skillFields,
     onCustomerNameChange,
   };

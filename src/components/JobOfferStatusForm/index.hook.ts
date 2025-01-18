@@ -3,6 +3,7 @@ import { professionalsKey } from "../../query/query-keys.ts";
 import {
   JobOfferDTO,
   ProfessionalControllerApi,
+  ProfessionalFilters,
   UpdateJobOfferStatusDTO,
   UpdateJobOfferStatusDTOStatusEnum,
 } from "../../apis/crm/api.ts";
@@ -35,21 +36,28 @@ export default function useJobOfferStatusForm(currentJobOffer: JobOfferDTO) {
     resolver: zodResolver(updateJobOfferStatusSchema),
   });
 
-  // TODO: filter professionals by `Available`
+  // Fetch professionals
+  const professionalFilters: ProfessionalFilters = {
+    byFullName: professionalNameDebounced,
+    byEmploymentState: "Available",
+  };
+
   const professionals = useQuery({
     queryKey: professionalsKey({
       page: 0,
       limit: 10,
-      filters: { byFullName: professionalNameDebounced },
+      filters: professionalFilters,
     }),
     queryFn: () =>
       professionalApi
-        .getProfessionals(0, 10, { byFullName: professionalNameDebounced })
+        .getProfessionals(0, 10, professionalFilters)
         .then((res) => res.data),
   });
 
   const status = watch("status");
 
+  // Only set a professional if we are trying to go
+  // to a Consolidated state
   useEffect(() => {
     if (status !== "Consolidated") {
       setValue("professionalId", undefined);

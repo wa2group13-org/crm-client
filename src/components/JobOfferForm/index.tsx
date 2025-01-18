@@ -89,7 +89,8 @@ export default function JobOfferForm({
           label="Job creator (customer)"
           onInputChange={onCustomerNameChange}
           loading={customersPending}
-          options={customers ?? []}
+          options={customers}
+          debounceTime={200}
         />
 
         <Typography variant="h6">Skills</Typography>
