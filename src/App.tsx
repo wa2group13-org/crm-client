@@ -14,6 +14,7 @@ import CreateCustomerPage from "./pages/CreateCustomerPage";
 import CustomerPage from "./pages/CustomerPage";
 import JobOfferCreatePage from "./pages/JobOfferCreatePage";
 import JobOfferPage from "./pages/JobOfferPage";
+import JobOffersPage from "./pages/JobOffersPage";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ export function App() {
                     element={<CreateCustomerPage />}
                   />
                   <Route path="profile" element={<ProfilePage />} />
+                  <Route path="jobs" element={<JobOffersPage />} />
                   <Route path="jobs/:jobOfferId" element={<JobOfferPage />} />
                   <Route path="jobs/create" element={<JobOfferCreatePage />} />
                 </Route>

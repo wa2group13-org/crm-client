@@ -34,22 +34,24 @@ export default function JobOfferHistory({
         </TableRow>
       </TableHead>
       <TableBody>
-        {history.map((item) => (
-          <TableRow key={item.id}>
-            <TableCell>
-              {dayjs(item.logTime).format("MMM D, YYYY h:mm A")}
-            </TableCell>
-            <TableCell align="right">{item.currentStatus}</TableCell>
-            <TableCell align="right">
-              <ProfessionalCell
-                id={item.assignedProfessional ?? null}
-                getProfessional={getProfessional}
-                onProfessionalClick={onProfessionalClick}
-              />
-            </TableCell>
-            <TableCell align="right">{item.note}</TableCell>
-          </TableRow>
-        ))}
+        {history
+          .sort((a, b) => dayjs(b.logTime).unix() - dayjs(a.logTime).unix())
+          .map((item) => (
+            <TableRow key={item.id}>
+              <TableCell>
+                {dayjs(item.logTime).format("MMM D, YYYY h:mm A")}
+              </TableCell>
+              <TableCell align="right">{item.currentStatus}</TableCell>
+              <TableCell align="right">
+                <ProfessionalCell
+                  id={item.assignedProfessional ?? null}
+                  getProfessional={getProfessional}
+                  onProfessionalClick={onProfessionalClick}
+                />
+              </TableCell>
+              <TableCell align="right">{item.note}</TableCell>
+            </TableRow>
+          ))}
       </TableBody>
     </Table>
   );
