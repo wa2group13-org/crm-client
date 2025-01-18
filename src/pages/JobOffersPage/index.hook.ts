@@ -1,12 +1,12 @@
 import { useLocation, useSearchParams } from "react-router-dom";
-import { CustomerControllerApi } from "../../apis/crm/api.ts";
+import { JobOfferControllerApi } from "../../apis/crm/api.ts";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { customersKey } from "../../query/query-keys.ts";
+import { jobOffersKey } from "../../query/query-keys.ts";
 
-export default function useCustomersPage() {
+export default function useJobOffersPage() {
   const [searchParams, setSearchParams] = useSearchParams({ page: "1" });
-  const customerApi = new CustomerControllerApi();
+  const jobOfferApi = new JobOfferControllerApi();
   const location = useLocation();
 
   function getPage() {
@@ -28,10 +28,10 @@ export default function useCustomersPage() {
   }, [location]);
 
   // Fetch customers from the server
-  const customers = useQuery({
-    queryKey: customersKey({ page, limit }),
+  const jobOffers = useQuery({
+    queryKey: jobOffersKey({ page: page - 1, limit }),
     queryFn: async () => {
-      const res = await customerApi.getCustomers(page - 1, limit, {});
+      const res = await jobOfferApi.getJobOffers({ page: page - 1, limit });
       return res.data;
     },
   });
@@ -40,5 +40,5 @@ export default function useCustomersPage() {
     setSearchParams({ page: `${page}` });
   }
 
-  return { page, setPage: setPageState, limit, customers };
+  return { page, setPage: setPageState, limit, jobOffers };
 }

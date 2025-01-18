@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { CustomerControllerApi, JobOfferDTO } from "../../apis/crm/api.ts";
 import { useQuery } from "@tanstack/react-query";
-import { CUSTOMER_KEY } from "../../query/query-keys.ts";
+import { customerKey } from "../../query/query-keys.ts";
 
 export default function useCustomerPage() {
   const { customerId } = useParams();
@@ -12,7 +12,7 @@ export default function useCustomerPage() {
   const customerApi = new CustomerControllerApi();
 
   const customer = useQuery({
-    queryKey: [CUSTOMER_KEY, { customerIdNumber }],
+    queryKey: customerKey(customerIdNumber),
     queryFn: async () => {
       const res = await customerApi.getCustomerById(customerIdNumber);
       return res.data;
@@ -20,8 +20,17 @@ export default function useCustomerPage() {
   });
 
   function onJobOfferClick(jobOffer: JobOfferDTO) {
-    navigate(`jobs/${jobOffer.id}`);
+    navigate(`/ui/jobs/${jobOffer.id}`);
   }
 
-  return { customerId: customerIdNumber, customer, onJobOfferClick };
+  function onJobOfferAdd() {
+    navigate("/ui/jobs/create", { state: { customer: customer.data } });
+  }
+
+  return {
+    customerId: customerIdNumber,
+    customer,
+    onJobOfferClick,
+    onJobOfferAdd,
+  };
 }

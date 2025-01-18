@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext } from "react";
 import { HomeControllerApi, UserDTO } from "../apis/api-gateway/api.ts";
 import { useQuery } from "@tanstack/react-query";
-import { USER_KEY } from "../query/query-keys.ts";
+import { userKey } from "../query/query-keys.ts";
 
 export const UserContext = createContext<UserDTO | null>(null);
 
@@ -17,7 +17,7 @@ export default function UserContextProvider({
   const homeApi = new HomeControllerApi();
 
   const user = useQuery({
-    queryKey: [USER_KEY],
+    queryKey: userKey(),
     queryFn: async () => {
       const res = await homeApi.user("");
       return res.data;

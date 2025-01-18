@@ -16,7 +16,7 @@ export function useApp() {
     if (
       oldLocation &&
       window.location.href !== oldLocation &&
-      window.location.pathname.startsWith("/ui")
+      !window.location.pathname.startsWith("/ui")
     ) {
       window.location.href = oldLocation;
     }

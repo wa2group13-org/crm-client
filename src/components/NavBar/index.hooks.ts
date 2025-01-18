@@ -12,7 +12,7 @@ export default function useNavBar() {
     window.location.href = user.loginUrl;
   }
 
-  const pages = [
+  const pages: { name: string; navigate: () => void }[] = [
     {
       name: "Professionals",
       navigate: () => navigate("/ui/professionals"),
@@ -20,6 +20,10 @@ export default function useNavBar() {
     {
       name: "Customers",
       navigate: () => navigate("/ui/customers"),
+    },
+    {
+      name: "Job offers",
+      navigate: () => navigate("/ui/jobs"),
     },
   ];
 

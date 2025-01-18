@@ -6,7 +6,7 @@ import {
 import { BaseSyntheticEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import { PROFESSIONAL_KEY } from "../../query/query-keys.ts";
+import { customerKey } from "../../query/query-keys.ts";
 import useMultipleForm from "../../hooks/useMultipleForm.ts";
 
 const CustomerFormStepsEnum = {
@@ -45,7 +45,7 @@ export default function useCreateCustomerPage() {
       const res = await customerApi.createCustomer(data);
       return res.data;
     },
-    mutationKey: [PROFESSIONAL_KEY],
+    mutationKey: customerKey(null),
   });
 
   const steps = useMultipleForm<CustomerFormStepsEnum>(

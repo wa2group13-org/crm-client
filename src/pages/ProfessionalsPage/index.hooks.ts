@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ProfessionalControllerApi } from "../../apis/crm/api.ts";
 import { useQuery } from "@tanstack/react-query";
-import { PROFESSIONALS_KEY } from "../../query/query-keys.ts";
+import { professionalsKey } from "../../query/query-keys.ts";
 import { useLocation, useSearchParams } from "react-router-dom";
 
 export default function useProfessionalsPage() {
@@ -29,7 +29,7 @@ export default function useProfessionalsPage() {
 
   // Fetch professionals from the server
   const professionals = useQuery({
-    queryKey: [PROFESSIONALS_KEY, { page }],
+    queryKey: professionalsKey({ page, limit }),
     queryFn: async () => {
       const res = await professionalApi.getProfessionals(page - 1, limit, {});
       // Too bad JSON only has arrays, from the web request the skills
