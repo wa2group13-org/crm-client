@@ -16,7 +16,7 @@ export const contactSchema = z.object({
         civic: z.string().min(1).max(255),
         postalCode: z.string().min(1).max(255),
         street: z.string().min(1).max(255),
-        // TODO: add country and fix the relative form.
+        country: z.string().min(1).max(255),
       }),
     )
     .max(100),

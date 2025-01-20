@@ -140,9 +140,9 @@ export default function ContactForm({
         <Divider />
         <ErrorText text={errors.addresses?.root?.message} />
         {addressFields.fields.map((field, index) => (
-          <Box key={field.id}>
+          <Box key={field.id} sx={{ m: 2 }}>
             <Grid2 container spacing={2}>
-              <Grid2 size={{ xs: 10, md: 6 }}>
+              <Grid2 size={{ xs: 12, md: 6 }}>
                 <TextField
                   {...register(`addresses.${index}.street` as const)}
                   type="text"
@@ -158,7 +158,7 @@ export default function ContactForm({
                 />
               </Grid2>
 
-              <Grid2 size={2}>
+              <Grid2 size={{ xs: 5, md: 2 }}>
                 <TextField
                   {...register(`addresses.${index}.civic` as const)}
                   type="text"
@@ -189,7 +189,7 @@ export default function ContactForm({
                 />
               </Grid2>
 
-              <Grid2 size={6}>
+              <Grid2 size={{ xs: 12, md: 6 }}>
                 <TextField
                   {...register(`addresses.${index}.city` as const)}
                   type="text"
@@ -203,12 +203,25 @@ export default function ContactForm({
                 />
               </Grid2>
 
-              <Grid2 size={2} sx={{ display: "grid", placeItems: "center" }}>
+              <Grid2 size={{ xs: 10, md: 5 }}>
+                <TextField
+                  {...register(`addresses.${index}.country` as const)}
+                  type="text"
+                  label="Country"
+                  placeholder="Country"
+                  error={!!errors.addresses?.[index]?.country}
+                  helperText={errors.addresses?.[index]?.country?.message}
+                />
+              </Grid2>
+
+              <Grid2 size={{ xs: 2, md: 1 }}>
                 <IconButton onClick={() => addressFields.remove(index)}>
                   <Delete />
                 </IconButton>
               </Grid2>
             </Grid2>
+
+            <Divider sx={{ m: 2 }} />
           </Box>
         ))}
 
@@ -220,6 +233,7 @@ export default function ContactForm({
                 civic: "",
                 city: "",
                 postalCode: "",
+                country: "",
               })
             }
           >
