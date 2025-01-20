@@ -21,6 +21,7 @@ import { AttachFile, FileDownload } from "@mui/icons-material";
 import MessageHistory from "../../components/MessageHistory";
 import MessageStatusDialog from "../../components/MessageStatusDialog";
 import MessagePriorityDialog from "../../components/MessagePriorityDialog";
+import { nextMessageStatus } from "../../machine/messageStatusStateMachine.ts";
 
 export default function MessagePage() {
   const { messageQuery, documentsQuery, download } = useMessagePage();
@@ -60,7 +61,12 @@ export default function MessagePage() {
         </Typography>
         <Typography>
           Status: {messageQuery.data.status}{" "}
-          <Button onClick={() => setStatusOpen(true)}>Change</Button>
+          <Button
+            onClick={() => setStatusOpen(true)}
+            disabled={nextMessageStatus(messageQuery.data.status).length === 0}
+          >
+            Change
+          </Button>
         </Typography>
         <Typography>Date: {messageQuery.data.date}</Typography>
         <Typography>Body: {messageQuery.data.body}</Typography>
