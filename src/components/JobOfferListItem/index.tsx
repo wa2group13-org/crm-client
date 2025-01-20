@@ -10,6 +10,10 @@ import {
   Construction,
   OpenInNew,
 } from "@mui/icons-material";
+import dayjs from "dayjs";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+
+dayjs.extend(localizedFormat);
 
 export default function JobOfferListItem({
   style,
@@ -34,10 +38,21 @@ export default function JobOfferListItem({
       <Box sx={{ display: "flex", flexDirection: "row", gap: 2 }}>
         <JobOfferAvatar jobOffer={jobOffer} />
 
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
           <Typography variant="h5">{jobOffer.description}</Typography>
 
-          <Typography>Owner: {owner()}</Typography>
+          <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+            <Typography sx={{ flexGrow: 1 }}>Owner: {owner()}</Typography>
+            <Typography sx={{ flexGrow: 0 }}>
+              {jobOffer.notes
+                .reduce(
+                  (p, c) =>
+                    dayjs(c.logTime).isBefore(p) ? dayjs(c.logTime) : p,
+                  dayjs(),
+                )
+                ?.format("LLL")}
+            </Typography>
+          </Box>
         </Box>
       </Box>
     </Box>
