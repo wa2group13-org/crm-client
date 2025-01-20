@@ -1,4 +1,4 @@
-import { z, ZodType } from "zod";
+import { z } from "zod";
 import {
   CreateContactDTO,
   CreateContactDTOCategoryEnum,
@@ -16,6 +16,7 @@ export const contactSchema = z.object({
         civic: z.string().min(1).max(255),
         postalCode: z.string().min(1).max(255),
         street: z.string().min(1).max(255),
+        // TODO: add country and fix the relative form.
       }),
     )
     .max(100),
@@ -35,4 +36,4 @@ export const contactSchema = z.object({
       }),
     )
     .max(100),
-}) satisfies ZodType<CreateContactDTO>;
+}) satisfies z.ZodType<CreateContactDTO>;

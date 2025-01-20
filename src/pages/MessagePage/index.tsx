@@ -2,6 +2,7 @@ import {
   Alert,
   Avatar,
   Box,
+  Button,
   Card,
   CardContent,
   CircularProgress,
@@ -15,12 +16,16 @@ import Loading from "../../components/Loading";
 import { DocumentMetadataDTO } from "../../apis/document_store/api.ts";
 import { UseQueryResult } from "@tanstack/react-query";
 import { bytesToBytes } from "../../utils/bytesFormat.ts";
-import { CSSProperties } from "react";
+import { CSSProperties, useState } from "react";
 import { AttachFile, FileDownload } from "@mui/icons-material";
 import MessageHistory from "../../components/MessageHistory";
+import MessageStatusDialog from "../../components/MessageStatusDialog";
+import MessagePriorityDialog from "../../components/MessagePriorityDialog";
 
 export default function MessagePage() {
   const { messageQuery, documentsQuery, download } = useMessagePage();
+  const [statusOpen, setStatusOpen] = useState(false);
+  const [priorityOpen, setPriorityOpen] = useState(false);
 
   if (messageQuery.isPending) return <Loading />;
 
@@ -29,20 +34,46 @@ export default function MessagePage() {
 
   return (
     <Container>
-      <Typography>Subject: {messageQuery.data.subject}</Typography>
-      <Typography>Sender: {messageQuery.data.sender}</Typography>
-      <Typography>Channel: {messageQuery.data.channel}</Typography>
-      <Typography>Priority: {messageQuery.data.priority}</Typography>
-      <Typography>Status: {messageQuery.data.status}</Typography>
-      <Typography>Date: {messageQuery.data.date}</Typography>
-      <Typography>Body: {messageQuery.data.body}</Typography>
-      {!(documentsQuery.isPending || documentsQuery.isError) &&
-        documentsQuery.data.length !== 0 && (
-          <Typography>Attachments: </Typography>
-        )}
-      <EmailDocuments documents={documentsQuery} download={download} />
-      <Typography>Message history:</Typography>{" "}
-      <MessageHistory message={messageQuery.data} />
+      {statusOpen && (
+        <MessageStatusDialog
+          defaultMessage={messageQuery.data}
+          open={statusOpen}
+          onSubmit={() => setStatusOpen(false)}
+          onCancel={() => setStatusOpen(false)}
+        />
+      )}
+      {priorityOpen && (
+        <MessagePriorityDialog
+          defaultMessage={messageQuery.data}
+          open={priorityOpen}
+          onSubmit={() => setPriorityOpen(false)}
+          onCancel={() => setPriorityOpen(false)}
+        />
+      )}
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+        <Typography>Subject: {messageQuery.data.subject}</Typography>
+        <Typography>Sender: {messageQuery.data.sender}</Typography>
+        <Typography>Channel: {messageQuery.data.channel} </Typography>
+        <Typography>
+          Priority: {messageQuery.data.priority}{" "}
+          <Button onClick={() => setPriorityOpen(true)}>Change</Button>
+        </Typography>
+        <Typography>
+          Status: {messageQuery.data.status}{" "}
+          <Button onClick={() => setStatusOpen(true)}>Change</Button>
+        </Typography>
+        <Typography>Date: {messageQuery.data.date}</Typography>
+        <Typography>Body: {messageQuery.data.body}</Typography>
+
+        {!(documentsQuery.isPending || documentsQuery.isError) &&
+          documentsQuery.data.length !== 0 && (
+            <Typography>Attachments: </Typography>
+          )}
+        <EmailDocuments documents={documentsQuery} download={download} />
+
+        <Typography>Message history:</Typography>
+        <MessageHistory message={messageQuery.data} />
+      </Box>
     </Container>
   );
 }
