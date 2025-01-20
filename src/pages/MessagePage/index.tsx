@@ -17,6 +17,7 @@ import { UseQueryResult } from "@tanstack/react-query";
 import { bytesToBytes } from "../../utils/bytesFormat.ts";
 import { CSSProperties } from "react";
 import { AttachFile, FileDownload } from "@mui/icons-material";
+import MessageHistory from "../../components/MessageHistory";
 
 export default function MessagePage() {
   const { messageQuery, documentsQuery, download } = useMessagePage();
@@ -35,13 +36,13 @@ export default function MessagePage() {
       <Typography>Status: {messageQuery.data.status}</Typography>
       <Typography>Date: {messageQuery.data.date}</Typography>
       <Typography>Body: {messageQuery.data.body}</Typography>
-
       {!(documentsQuery.isPending || documentsQuery.isError) &&
         documentsQuery.data.length !== 0 && (
           <Typography>Attachments: </Typography>
         )}
-
       <EmailDocuments documents={documentsQuery} download={download} />
+      <Typography>Message history:</Typography>{" "}
+      <MessageHistory message={messageQuery.data} />
     </Container>
   );
 }
