@@ -10,7 +10,6 @@ import {
   DocumentControllerApi,
   DocumentMetadataDTO,
 } from "../../apis/document_store/api.ts";
-import dayjs from "dayjs";
 import { downloadFile } from "../../utils/downloadFile.ts";
 import { b64ToBlob } from "../../utils/b64toBlob.ts";
 import { CreateEmailDTO } from "../../apis/communication_manager/api.ts";
@@ -32,45 +31,22 @@ export default function useMessagePage() {
   const documentsQuery = useQuery({
     queryKey: documentsKey({ mailId: messageQuery.data?.mailId }),
     queryFn: async () =>
-      messageQuery.data?.mailId == null
-        ? [
-            {
-              name: "sium.png",
-              size: 1000,
-              id: 1,
-              creationTimestamp: dayjs().toISOString(),
-              contentType: "image/png",
-            },
-            {
-              name: "sium.png",
-              size: 1000,
-              id: 2,
-              creationTimestamp: dayjs().toISOString(),
-              contentType: "image/png",
-            },
-          ]
-        : // TODO: change this when updating the controller
-          await documentApi
+      !messageQuery.data?.mailId
+        ? []
+        : await documentApi
             .getDocumentByMailId(messageQuery.data?.mailId)
-            .then((res) => [res.data]),
+            .then((res) => res.data),
     enabled: !(messageQuery.isPending || messageQuery.isError),
   });
 
   async function download(document: DocumentMetadataDTO) {
-    let doc = await queryClient
+    const doc = await queryClient
       .fetchQuery({
         queryKey: documentBlobKey({ documentId: document.id }),
         queryFn: () =>
           documentApi.getDocumentBytes(document.id).then((res) => res.data),
       })
       .catch((err) => alert(err.message));
-
-    // TODO: remove this as well...
-    doc = {
-      bytes:
-        "iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==",
-      metadata: document,
-    };
 
     if (!doc) return;
 
