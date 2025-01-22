@@ -17,14 +17,16 @@ import { DocumentMetadataDTO } from "../../apis/document_store/api.ts";
 import { UseQueryResult } from "@tanstack/react-query";
 import { bytesToBytes } from "../../utils/bytesFormat.ts";
 import { CSSProperties, useState } from "react";
-import { AttachFile, FileDownload } from "@mui/icons-material";
+import { AttachFile, FileDownload, Reply } from "@mui/icons-material";
 import MessageHistory from "../../components/MessageHistory";
 import MessageStatusDialog from "../../components/MessageStatusDialog";
 import MessagePriorityDialog from "../../components/MessagePriorityDialog";
 import { nextMessageStatus } from "../../machine/messageStatusStateMachine.ts";
+import Decode from "../../components/Decode";
 
 export default function MessagePage() {
-  const { messageQuery, documentsQuery, download } = useMessagePage();
+  const { messageQuery, documentsQuery, download, onReplyClick } =
+    useMessagePage();
   const [statusOpen, setStatusOpen] = useState(false);
   const [priorityOpen, setPriorityOpen] = useState(false);
 
@@ -52,6 +54,15 @@ export default function MessagePage() {
         />
       )}
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+        <Box>
+          <Button
+            variant="outlined"
+            endIcon={<Reply />}
+            onClick={() => onReplyClick(messageQuery.data)}
+          >
+            Reply
+          </Button>
+        </Box>
         <Typography>Subject: {messageQuery.data.subject}</Typography>
         <Typography>Sender: {messageQuery.data.sender}</Typography>
         <Typography>Channel: {messageQuery.data.channel} </Typography>
@@ -69,7 +80,9 @@ export default function MessagePage() {
           </Button>
         </Typography>
         <Typography>Date: {messageQuery.data.date}</Typography>
-        <Typography>Body: {messageQuery.data.body}</Typography>
+        <Typography>
+          Body: <Decode text={messageQuery.data.body} />
+        </Typography>
 
         {!(documentsQuery.isPending || documentsQuery.isError) &&
           documentsQuery.data.length !== 0 && (

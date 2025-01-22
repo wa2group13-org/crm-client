@@ -1,11 +1,11 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   documentBlobKey,
   documentsKey,
   messageKey,
 } from "../../query/query-keys.ts";
-import { MessageControllerApi } from "../../apis/crm/api.ts";
+import { MessageControllerApi, MessageDTO } from "../../apis/crm/api.ts";
 import {
   DocumentControllerApi,
   DocumentMetadataDTO,
@@ -13,6 +13,7 @@ import {
 import dayjs from "dayjs";
 import { downloadFile } from "../../utils/downloadFile.ts";
 import { b64ToBlob } from "../../utils/b64toBlob.ts";
+import { CreateEmailDTO } from "../../apis/communication_manager/api.ts";
 
 export default function useMessagePage() {
   const { messageId: messageIdParam } = useParams();
@@ -21,6 +22,7 @@ export default function useMessagePage() {
   const messageApi = new MessageControllerApi();
   const documentApi = new DocumentControllerApi();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const messageQuery = useQuery({
     queryKey: messageKey(messageId),
@@ -77,5 +79,19 @@ export default function useMessagePage() {
     downloadFile(blob, doc.metadata.name);
   }
 
-  return { messageQuery, documentsQuery, download };
+  function onReplyClick(message: MessageDTO) {
+    const groups =
+      message.sender.match(/(<(?<inner>[^>]+)>$)|(^(?<plain>[^ ]+)$)/)
+        ?.groups ?? {};
+
+    const reply: CreateEmailDTO = {
+      recipient: groups.inner ?? groups.plain ?? "",
+      subject: "",
+      body: "",
+    };
+
+    navigate("/ui/messages/create", { state: reply });
+  }
+
+  return { messageQuery, documentsQuery, download, onReplyClick };
 }

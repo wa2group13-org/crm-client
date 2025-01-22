@@ -1,11 +1,12 @@
 import { MessageControllerApi } from "../../apis/crm/api.ts";
 import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { messagesKey } from "../../query/query-keys.ts";
 
 export default function useMessagesPage() {
   const [searchParams, setSearchParams] = useSearchParams({ page: "1" });
+  const location = useLocation();
   const messageApi = new MessageControllerApi();
 
   function getPage() {

@@ -17,6 +17,7 @@ import JobOfferPage from "./pages/JobOfferPage";
 import JobOffersPage from "./pages/JobOffersPage";
 import MessagesPage from "./pages/MessagesPage";
 import MessagePage from "./pages/MessagePage";
+import MessageCreatePage from "./pages/MessageCreatePage";
 
 const queryClient = new QueryClient();
 
@@ -55,6 +56,10 @@ export function App() {
                   <Route path="jobs/create" element={<JobOfferCreatePage />} />
                   <Route path="messages" element={<MessagesPage />} />
                   <Route path="messages/:messageId" element={<MessagePage />} />
+                  <Route
+                    path="messages/create"
+                    element={<MessageCreatePage />}
+                  />
                 </Route>
               </Routes>
             </Router>

@@ -17,6 +17,7 @@ export const MESSAGE_KEY = "message_key";
 export const DOCUMENTS_KEY = "documents_key";
 export const DOCUMENT_BLOB_KEY = "document_blob_key";
 export const MESSAGE_HISTORY_KEY = "message_history_key";
+export const EMAIL_KEY = "email_key";
 
 export function professionalsKey(keys: {
   page?: number;
@@ -77,4 +78,8 @@ export function documentBlobKey(keys: { documentId?: number }) {
 
 export function messageHistoryKey(messageId: number | null) {
   return [MESSAGE_HISTORY_KEY, messageId];
+}
+
+export function emailKey(emailId: number | null) {
+  return [EMAIL_KEY, emailId];
 }
