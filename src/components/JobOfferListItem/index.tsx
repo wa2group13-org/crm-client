@@ -1,8 +1,14 @@
 import useJobOfferListItem from "./index.hook.ts";
 import { CSSProperties } from "react";
 import { JobOfferDTO } from "../../apis/crm/api.ts";
-import { Alert, Avatar, Box, Typography, useTheme } from "@mui/material";
-import Loading from "../Loading";
+import {
+  Alert,
+  Avatar,
+  Box,
+  CircularProgress,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import {
   Cancel,
   CheckCircle,
@@ -25,7 +31,7 @@ export default function JobOfferListItem({
   const { customerQuery } = useJobOfferListItem(jobOffer);
 
   const owner = () => {
-    if (customerQuery.isPending) return <Loading />;
+    if (customerQuery.isPending) return <CircularProgress size={2} />;
 
     if (customerQuery.isError)
       return <Alert severity="error">{customerQuery.error.message}</Alert>;

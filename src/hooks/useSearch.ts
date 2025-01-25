@@ -24,9 +24,15 @@ export function useSearch<P extends Record<string, S>, S>(params: P) {
     });
   }, []);
 
+  const currentParams = [...searchParams.entries()];
+
   const newParams: P = Object.fromEntries(
-    [...searchParams.entries()].map((value) => {
-      const [key, item] = value;
+    Object.entries(parsedParams).map((value) => {
+      const key = value[0];
+      let item = value[1];
+
+      const index = currentParams.map(([k]) => k).indexOf(key);
+      if (index !== -1) item = currentParams[index][1];
 
       if (typeof params[key] === "string") return [key, item];
       else return [key, JSON.parse(item) as S];
