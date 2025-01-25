@@ -15,7 +15,7 @@ import ErrorAlert from "../../components/ErrorAlert";
 
 export default function ProfessionalsPage() {
   const navigate = useNavigate();
-  const { page, setPage, professionals } = useProfessionalsPage();
+  const { page, setPage, professionals, isLogin } = useProfessionalsPage();
 
   if (professionals.isPending) return <Loading />;
 
@@ -28,13 +28,15 @@ export default function ProfessionalsPage() {
         <Typography variant="h3" sx={{ flexGrow: 1 }}>
           Professionals
         </Typography>
-        <Button
-          variant="contained"
-          sx={{ flexGrow: 0 }}
-          onClick={() => navigate("/ui/professionals/create")}
-        >
-          Add professional
-        </Button>
+        {isLogin && (
+          <Button
+            variant="contained"
+            sx={{ flexGrow: 0 }}
+            onClick={() => navigate("/ui/professionals/create")}
+          >
+            Add professional
+          </Button>
+        )}
       </Box>
       <List sx={{ width: "100%" }}>
         {professionals.data.content?.map((p) => (

@@ -2,6 +2,7 @@ import { JobOfferControllerApi } from "../../apis/crm/api.ts";
 import { useQuery } from "@tanstack/react-query";
 import { jobOffersKey } from "../../query/query-keys.ts";
 import { useSearch } from "../../hooks/useSearch.ts";
+import { useIsLogin } from "../../hooks/useIsLogin.ts";
 
 export default function useJobOffersPage() {
   const {
@@ -9,6 +10,7 @@ export default function useJobOffersPage() {
     setParams,
   } = useSearch({ page: 1 } as { page: number });
   const jobOfferApi = new JobOfferControllerApi();
+  const isLogin = useIsLogin();
 
   const limit = 10;
 
@@ -25,5 +27,5 @@ export default function useJobOffersPage() {
     setParams("page", page);
   }
 
-  return { page, setPage: setPageState, limit, jobOffers };
+  return { page, setPage: setPageState, limit, jobOffers, isLogin };
 }

@@ -12,6 +12,7 @@ import {
   jobOfferKey,
   professionalKey,
 } from "../../query/query-keys.ts";
+import { useIsLogin } from "../../hooks/useIsLogin.ts";
 
 export default function useJobOfferPage() {
   const { jobOfferId } = useParams();
@@ -24,6 +25,7 @@ export default function useJobOfferPage() {
   const customerApi = new CustomerControllerApi();
 
   const navigate = useNavigate();
+  const isLogin = useIsLogin();
 
   const jobOffer = useQuery({
     queryKey: jobOfferKey(jobOfferIdNumber),
@@ -72,5 +74,6 @@ export default function useJobOfferPage() {
     customer,
     onProfessionalClick,
     onCustomerClick,
+    isLogin,
   };
 }

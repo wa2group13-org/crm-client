@@ -2,8 +2,10 @@ import { ProfessionalControllerApi } from "../../apis/crm/api.ts";
 import { useQuery } from "@tanstack/react-query";
 import { professionalsKey } from "../../query/query-keys.ts";
 import { useSearch } from "../../hooks/useSearch.ts";
+import { useIsLogin } from "../../hooks/useIsLogin.ts";
 
 export default function useProfessionalsPage() {
+  const isLogin = useIsLogin();
   const {
     params: { page },
     setParams,
@@ -29,5 +31,5 @@ export default function useProfessionalsPage() {
     },
   });
 
-  return { page, setPage: setPageState, limit, professionals };
+  return { page, setPage: setPageState, limit, professionals, isLogin };
 }

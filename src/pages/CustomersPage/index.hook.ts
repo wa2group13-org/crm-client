@@ -3,11 +3,13 @@ import { CustomerControllerApi } from "../../apis/crm/api.ts";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { customersKey } from "../../query/query-keys.ts";
+import { useIsLogin } from "../../hooks/useIsLogin.ts";
 
 export default function useCustomersPage() {
   const [searchParams, setSearchParams] = useSearchParams({ page: "1" });
   const customerApi = new CustomerControllerApi();
   const location = useLocation();
+  const isLogin = useIsLogin();
 
   function getPage() {
     const page = Number.parseInt(searchParams.get("page") || "1");
@@ -40,5 +42,5 @@ export default function useCustomersPage() {
     setSearchParams({ page: `${page}` });
   }
 
-  return { page, setPage: setPageState, limit, customers };
+  return { page, setPage: setPageState, limit, customers, isLogin };
 }

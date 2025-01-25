@@ -15,7 +15,7 @@ import JobOfferListItem from "../../components/JobOfferListItem";
 
 export default function JobOffersPage() {
   const navigate = useNavigate();
-  const { page, setPage, jobOffers } = useJobOffersPage();
+  const { page, setPage, jobOffers, isLogin } = useJobOffersPage();
 
   if (jobOffers.isPending) return <Loading />;
 
@@ -32,13 +32,16 @@ export default function JobOffersPage() {
         <Typography variant="h3" sx={{ flexGrow: 1 }}>
           Job offers
         </Typography>
-        <Button
-          variant="contained"
-          sx={{ flexGrow: 0 }}
-          onClick={() => navigate("/ui/jobs/create")}
-        >
-          Add job offer
-        </Button>
+
+        {isLogin && (
+          <Button
+            variant="contained"
+            sx={{ flexGrow: 0 }}
+            onClick={() => navigate("/ui/jobs/create")}
+          >
+            Add job offer
+          </Button>
+        )}
       </Box>
 
       <List sx={{ width: "100%" }}>

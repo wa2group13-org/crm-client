@@ -38,6 +38,7 @@ export default function JobOfferPage() {
     professional,
     onProfessionalClick,
     onCustomerClick,
+    isLogin,
   } = useJobOfferPage();
 
   const {
@@ -72,9 +73,10 @@ export default function JobOfferPage() {
             style={{ margin: 5, padding: 20, fontWeight: "bold" }}
           />
 
-          {jobOffer.data.status !== "Aborted" && (
+          {isLogin && (
             <Button
               variant="outlined"
+              disabled={jobOffer.data.status === "Aborted"}
               onClick={openForm}
               startIcon={<Settings />}
             >

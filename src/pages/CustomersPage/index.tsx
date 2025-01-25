@@ -15,7 +15,7 @@ import CustomerListItem from "../../components/CustomerListItem";
 
 export default function CustomersPage() {
   const navigate = useNavigate();
-  const { page, setPage, customers } = useCustomersPage();
+  const { page, setPage, customers, isLogin } = useCustomersPage();
 
   if (customers.isPending) return <Loading />;
 
@@ -32,13 +32,16 @@ export default function CustomersPage() {
         <Typography variant="h3" sx={{ flexGrow: 1 }}>
           Customers
         </Typography>
-        <Button
-          variant="contained"
-          sx={{ flexGrow: 0 }}
-          onClick={() => navigate("/ui/customers/create")}
-        >
-          Add customer
-        </Button>
+
+        {isLogin && (
+          <Button
+            variant="contained"
+            sx={{ flexGrow: 0 }}
+            onClick={() => navigate("/ui/customers/create")}
+          >
+            Add customer
+          </Button>
+        )}
       </Box>
 
       <List sx={{ width: "100%" }}>
