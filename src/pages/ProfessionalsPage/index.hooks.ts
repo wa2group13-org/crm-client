@@ -1,4 +1,8 @@
-import { ProfessionalControllerApi } from "../../apis/crm/api.ts";
+import {
+  LocationFilter,
+  ProfessionalControllerApi,
+  ProfessionalFilters,
+} from "../../apis/crm/api.ts";
 import { useQuery } from "@tanstack/react-query";
 import { professionalsKey } from "../../query/query-keys.ts";
 import { useSearch } from "../../hooks/useSearch.ts";
@@ -7,9 +11,12 @@ import { useIsLogin } from "../../hooks/useIsLogin.ts";
 export default function useProfessionalsPage() {
   const isLogin = useIsLogin();
   const {
-    params: { page },
+    params: { page, filters },
     setParams,
-  } = useSearch({ page: 1 } as { page: number });
+  } = useSearch({ page: 1, filters: {} } as {
+    page: number;
+    filters: ProfessionalFilters;
+  });
   const professionalApi = new ProfessionalControllerApi();
 
   const limit = 10;
@@ -18,11 +25,44 @@ export default function useProfessionalsPage() {
     setParams("page", page);
   }
 
+  function setFilters(filters: ProfessionalFilters) {
+    const newFilters: ProfessionalFilters = {};
+
+    const loc = (s: keyof LocationFilter) => {
+      if (filters.byLocation?.[s]) {
+        newFilters["byLocation"] = {};
+        newFilters["byLocation"][s] = filters.byLocation[s];
+      }
+    };
+
+    if (filters.bySkills?.length !== 0)
+      newFilters["bySkills"] = filters.bySkills;
+
+    if (filters.byEmploymentState)
+      newFilters["byEmploymentState"] = filters.byEmploymentState;
+
+    if (filters.byFullName) newFilters["byFullName"] = filters.byFullName;
+
+    loc("byCity");
+    loc("byCivic");
+    loc("byCountry");
+    loc("byPostalCode");
+    loc("byStreet");
+
+    console.log(newFilters);
+
+    setParams("filters", newFilters);
+  }
+
   // Fetch professionals from the server
   const professionals = useQuery({
-    queryKey: professionalsKey({ page, limit }),
+    queryKey: professionalsKey({ page: page - 1, limit, filters }),
     queryFn: async () => {
-      const res = await professionalApi.getProfessionals(page - 1, limit, {});
+      const res = await professionalApi.getProfessionals(
+        page - 1,
+        limit,
+        filters,
+      );
       // Too bad JSON only has arrays, from the web request the skills
       // need to be cast again to a `Set`, this is because the field
       // is an array :(
@@ -31,5 +71,13 @@ export default function useProfessionalsPage() {
     },
   });
 
-  return { page, setPage: setPageState, limit, professionals, isLogin };
+  return {
+    page,
+    setPage: setPageState,
+    limit,
+    professionals,
+    isLogin,
+    filters,
+    setFilters,
+  };
 }
