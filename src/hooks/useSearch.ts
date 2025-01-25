@@ -1,4 +1,5 @@
 import { useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
 
 export function useSearch<P extends Record<string, S>, S>(params: P) {
   const parsed = Object.entries(params).map((value) => {
@@ -10,6 +11,10 @@ export function useSearch<P extends Record<string, S>, S>(params: P) {
   const pParams: { [p: string]: string } = Object.fromEntries(parsed);
 
   const [searchParams, setSearchParams] = useSearchParams(pParams);
+
+  useEffect(() => {
+    setSearchParams(pParams);
+  }, []);
 
   const newParams: P = Object.fromEntries(
     [...searchParams.entries()].map((value) => {
@@ -36,10 +41,16 @@ export function useSearch<P extends Record<string, S>, S>(params: P) {
     },
     setParams: function <K extends keyof P>(key: K, value: P[K]): void {
       let newValue;
-      if (typeof params[key] === "string") newValue = value;
+      if (typeof params[key] === "string") newValue = value as string;
       else newValue = JSON.stringify(value);
 
-      setSearchParams((prev) => ({ ...prev, [key]: newValue }));
+      setSearchParams((prev) => ({
+        ...[...prev.entries()].reduce((p: { [k: string]: string }, n) => {
+          p[n[0]] = n[1];
+          return p;
+        }, {}),
+        [key]: newValue,
+      }));
     },
   };
 }

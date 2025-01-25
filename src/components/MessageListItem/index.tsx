@@ -37,6 +37,9 @@ export default function MessageListItem({
               {message.sender}
             </Typography>
 
+            <Typography sx={{ flexGrow: 0, mr: 2 }}>
+              {message.priority}
+            </Typography>
             <Typography sx={{ flexGrow: 0 }}>
               {dayjs(message.date).format("dd MMM YYYY")}
             </Typography>
