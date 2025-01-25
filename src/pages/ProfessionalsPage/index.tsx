@@ -100,6 +100,7 @@ function ProfessionalFiltersButton({
             onSubmit={(filters, event) => {
               event?.preventDefault();
               setFilters(filters);
+              setOpen(false);
             }}
           />
         </Box>

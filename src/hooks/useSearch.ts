@@ -8,12 +8,20 @@ export function useSearch<P extends Record<string, S>, S>(params: P) {
     else return [key, val];
   });
 
-  const pParams: { [p: string]: string } = Object.fromEntries(parsed);
+  const parsedParams: { [p: string]: string } = Object.fromEntries(parsed);
 
-  const [searchParams, setSearchParams] = useSearchParams(pParams);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    setSearchParams(pParams);
+    setSearchParams((prev) => {
+      const curr = [...prev.entries()];
+
+      const newer = Object.entries(parsedParams).filter(
+        ([key]) => !curr.map(([k]) => k).includes(key),
+      );
+
+      return curr.concat(newer);
+    });
   }, []);
 
   const newParams: P = Object.fromEntries(

@@ -49,8 +49,6 @@ export default function useProfessionalsPage() {
     loc("byPostalCode");
     loc("byStreet");
 
-    console.log(newFilters);
-
     setParams("filters", newFilters);
   }
 
