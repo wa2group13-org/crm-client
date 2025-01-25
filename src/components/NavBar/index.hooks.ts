@@ -32,6 +32,10 @@ export default function useNavBar() {
       label: "Profile",
       onClick: () => navigate("/ui/profile"),
     },
+    {
+      label: "Messages",
+      onClick: () => navigate("/ui/messages"),
+    },
   ];
 
   return { user, onLogin, pages, menuSettings };

@@ -1,31 +1,16 @@
-import { useLocation, useSearchParams } from "react-router-dom";
 import { JobOfferControllerApi } from "../../apis/crm/api.ts";
-import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { jobOffersKey } from "../../query/query-keys.ts";
+import { useSearch } from "../../hooks/useSearch.ts";
 
 export default function useJobOffersPage() {
-  const [searchParams, setSearchParams] = useSearchParams({ page: "1" });
+  const {
+    params: { page },
+    setParams,
+  } = useSearch({ page: 1 } as { page: number });
   const jobOfferApi = new JobOfferControllerApi();
-  const location = useLocation();
 
-  function getPage() {
-    const page = Number.parseInt(searchParams.get("page") || "1");
-
-    if (isNaN(page)) {
-      return 1;
-    }
-
-    return page;
-  }
-
-  const [page, setPage] = useState(getPage());
   const limit = 10;
-
-  // When the URL updates, also updated the page
-  useEffect(() => {
-    setPage(getPage());
-  }, [location]);
 
   // Fetch customers from the server
   const jobOffers = useQuery({
@@ -37,7 +22,7 @@ export default function useJobOffersPage() {
   });
 
   function setPageState(page: number) {
-    setSearchParams({ page: `${page}` });
+    setParams("page", page);
   }
 
   return { page, setPage: setPageState, limit, jobOffers };
