@@ -49,6 +49,7 @@ export default function CreateProfessionalPage() {
         {currentStep === "Review" && professional && (
           <ProfessionalReview
             professional={professional}
+            contact={contact}
             isLoading={mutation.isPending}
             error={mutation.error}
             onSubmit={onReviewSubmit}

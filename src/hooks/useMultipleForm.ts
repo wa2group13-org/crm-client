@@ -1,8 +1,19 @@
 import { useEffect, useState } from "react";
 
-export default function useMultipleForm<T>(elements: T[]) {
-  const [index, setIndex] = useState(0);
-  const [current, setCurrent] = useState(elements[0]);
+export default function useMultipleForm<T>({
+  elements,
+  firstState,
+  onStateChange,
+}: {
+  elements: T[];
+  firstState?: number | T;
+  onStateChange?: (index: number, element: T) => "block" | "continue";
+}) {
+  if (typeof firstState !== "undefined" && typeof firstState !== "number")
+    firstState = elements.indexOf(firstState);
+
+  const [index, setIndex] = useState(firstState ?? 0);
+  const [current, setCurrent] = useState(elements[index]);
 
   useEffect(() => {
     setCurrent(elements[index]);
@@ -10,15 +21,23 @@ export default function useMultipleForm<T>(elements: T[]) {
 
   function nextStep() {
     setIndex((n) => {
-      if (n >= elements.length - 1) return n;
-      return n + 1;
+      const newIndex = n >= elements.length - 1 ? n : n + 1;
+
+      const state = onStateChange?.(newIndex, elements[newIndex]) ?? "continue";
+      if (state === "block") return n;
+
+      return newIndex;
     });
   }
 
   function prevStep() {
     setIndex((n) => {
-      if (n <= 0) return 0;
-      return n - 1;
+      const newIndex = n <= 0 ? 0 : n - 1;
+
+      const state = onStateChange?.(newIndex, elements[newIndex]) ?? "continue";
+      if (state === "block") return n;
+
+      return newIndex;
     });
   }
 

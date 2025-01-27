@@ -1,11 +1,16 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  contactKey,
   documentBlobKey,
   documentsKey,
   messageKey,
 } from "../../query/query-keys.ts";
-import { MessageControllerApi, MessageDTO } from "../../apis/crm/api.ts";
+import {
+  ContactControllerApi,
+  MessageControllerApi,
+  MessageDTO,
+} from "../../apis/crm/api.ts";
 import {
   DocumentControllerApi,
   DocumentMetadataDTO,
@@ -18,8 +23,11 @@ export default function useMessagePage() {
   const { messageId: messageIdParam } = useParams();
   if (!messageIdParam) throw new Error("No messageId provided!");
   const messageId = Number.parseInt(messageIdParam);
+
   const messageApi = new MessageControllerApi();
   const documentApi = new DocumentControllerApi();
+  const contactApi = new ContactControllerApi();
+
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -37,6 +45,15 @@ export default function useMessagePage() {
             .getDocumentByMailId(messageQuery.data?.mailId)
             .then((res) => res.data),
     enabled: !(messageQuery.isPending || messageQuery.isError),
+  });
+
+  const contactQuery = useQuery({
+    queryKey: contactKey({ contactId: messageQuery.data?.contactId }),
+    queryFn: async () =>
+      contactApi
+        .getContactById(messageQuery.data?.contactId ?? 0)
+        .then((res) => res.data),
+    enabled: messageQuery.data?.contactId != null,
   });
 
   async function download(document: DocumentMetadataDTO) {
@@ -69,5 +86,5 @@ export default function useMessagePage() {
     navigate("/ui/messages/create", { state: reply });
   }
 
-  return { messageQuery, documentsQuery, download, onReplyClick };
+  return { messageQuery, contactQuery, documentsQuery, download, onReplyClick };
 }

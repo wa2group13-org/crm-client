@@ -1,4 +1,4 @@
-import { CreateProfessionalDTO } from "../../apis/crm/api.ts";
+import { CreateContactDTO, CreateProfessionalDTO } from "../../apis/crm/api.ts";
 import {
   Box,
   Button,
@@ -13,17 +13,21 @@ import ErrorText from "../ErrorText";
 
 export default function ProfessionalReview({
   professional,
+  contact,
   isLoading,
   error,
   onSubmit,
   onCancel,
 }: {
   professional: CreateProfessionalDTO;
+  contact?: CreateContactDTO;
   isLoading?: boolean;
   error?: Error | null;
   onSubmit: () => void;
   onCancel?: () => void;
 }) {
+  contact = professional.contactInfo || contact;
+
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
       <OutlinedLabel text={professional.notes} label={"Notes"} />
@@ -43,49 +47,37 @@ export default function ProfessionalReview({
         <OutlinedTypography key={index} text={skill} />
       ))}
 
-      <OutlinedLabel
-        text={professional.contactInfo?.name ?? ""}
-        label={"Name"}
-      />
+      <OutlinedLabel text={contact?.name ?? ""} label={"Name"} />
 
-      <OutlinedLabel
-        text={professional.contactInfo?.surname ?? ""}
-        label={"Surname"}
-      />
+      <OutlinedLabel text={contact?.surname ?? ""} label={"Surname"} />
 
-      <OutlinedLabel text={professional.contactInfo?.ssn ?? ""} label={"SSN"} />
+      <OutlinedLabel text={contact?.ssn ?? ""} label={"SSN"} />
 
       <Typography variant="h6">Emails</Typography>
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
-        {professional.contactInfo?.emails.map((email, index) => (
+        {contact?.emails.map((email, index) => (
           <OutlinedTypography key={index} text={email.email} />
         ))}
 
-        {professional.contactInfo?.emails.length === 0 && (
-          <OutlinedTypography text={"-"} />
-        )}
+        {contact?.emails.length === 0 && <OutlinedTypography text={"-"} />}
       </Box>
 
       <Typography variant="h6">Telephones</Typography>
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
-        {professional.contactInfo?.telephones.map((telephones, index) => (
+        {contact?.telephones.map((telephones, index) => (
           <OutlinedTypography key={index} text={telephones.number} />
         ))}
 
-        {professional.contactInfo?.telephones.length === 0 && (
-          <OutlinedTypography text={"-"} />
-        )}
+        {contact?.telephones.length === 0 && <OutlinedTypography text={"-"} />}
       </Box>
 
       <Typography variant="h6">Addresses</Typography>
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
-        {professional.contactInfo?.addresses.map((address, index) => (
+        {contact?.addresses.map((address, index) => (
           <OutlinedTypography key={index} text={formatAddress(address)} />
         ))}
 
-        {professional.contactInfo?.addresses.length === 0 && (
-          <OutlinedTypography text={"-"} />
-        )}
+        {contact?.addresses.length === 0 && <OutlinedTypography text={"-"} />}
       </Box>
 
       <Divider />

@@ -1,10 +1,12 @@
 import {
+  ContactDTO,
   CreateContactDTO,
   CreateCustomerDTO,
   CustomerControllerApi,
+  CustomerDTO,
 } from "../../apis/crm/api.ts";
 import { BaseSyntheticEvent, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Location, useLocation, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { customerKey } from "../../query/query-keys.ts";
 import useMultipleForm from "../../hooks/useMultipleForm.ts";
@@ -34,23 +36,49 @@ const stepsWithLabels = Object.values(CustomerFormStepsEnum).map((s) => ({
   label: stepLabel(s),
 }));
 
+interface LocationState {
+  contact?: ContactDTO;
+  customer?: CustomerDTO;
+  fromMessage?: boolean;
+}
+
+interface LocationStatePresent extends LocationState {
+  contact: ContactDTO;
+  fromMessage: true;
+}
+
+interface LocationStateAbsent extends LocationState {
+  contact?: ContactDTO;
+  fromMessage?: false;
+}
+
+export type CustomerLocationType = LocationStatePresent | LocationStateAbsent;
+
 export default function useCreateCustomerPage() {
   const customerApi = new CustomerControllerApi();
-  const [contact, setContact] = useState<CreateContactDTO | undefined>();
-  const [customer, setCustomer] = useState<CreateCustomerDTO | undefined>();
+  const { state }: Location<CustomerLocationType | null> = useLocation();
+
+  const [contact, setContact] = useState<CreateContactDTO | undefined>(
+    state?.contact,
+  );
+  const [customer, setCustomer] = useState<CreateCustomerDTO | undefined>(
+    state?.customer && {
+      note: state.customer.note ?? "",
+      contactId: state.customer.contact.id,
+    },
+  );
   const navigate = useNavigate();
 
   const mutation = useMutation({
-    mutationFn: async (data: CreateCustomerDTO) => {
-      const res = await customerApi.createCustomer(data);
-      return res.data;
-    },
+    mutationFn: async (data: CreateCustomerDTO) =>
+      customerApi.createCustomer(data).then((res) => res.data),
     mutationKey: customerKey(null),
   });
 
-  const steps = useMultipleForm<CustomerFormStepsEnum>(
-    Object.values(CustomerFormStepsEnum),
-  );
+  const steps = useMultipleForm<CustomerFormStepsEnum>({
+    elements: Object.values(CustomerFormStepsEnum),
+    firstState: state?.fromMessage ? "Customer" : undefined,
+  });
 
   async function onContactSubmit(
     contact: CreateContactDTO,
@@ -66,7 +94,13 @@ export default function useCreateCustomerPage() {
     event?: BaseSyntheticEvent,
   ) {
     event?.preventDefault();
-    customer.contactInfo = contact;
+
+    if (state?.fromMessage) {
+      customer.contactId = state.contact.id;
+    } else {
+      customer.contactInfo = contact;
+    }
+
     setCustomer(customer);
     steps.nextStep();
   }
@@ -85,6 +119,8 @@ export default function useCreateCustomerPage() {
   }
 
   function onCustomerCancel() {
+    // Prevent change the contact when converting a message contact to a customer
+    if (state?.fromMessage) return navigate(-1);
     steps.prevStep();
   }
 

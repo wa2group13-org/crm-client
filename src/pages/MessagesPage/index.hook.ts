@@ -24,14 +24,11 @@ export default function useMessagesPage() {
       messageApi.getMessages(page - 1, limit, sortBy).then((res) => res.data),
   });
 
-  console.log(messagesQuery.data?.content);
-
   function setPageParam(page: number) {
     setParams("page", page);
   }
 
   function setSortBy(sort: GetMessagesSortByEnum) {
-    console.log(sort);
     setParams("sortBy", sort);
   }
 

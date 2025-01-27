@@ -23,9 +23,13 @@ import MessageStatusDialog from "../../components/MessageStatusDialog";
 import MessagePriorityDialog from "../../components/MessagePriorityDialog";
 import { nextMessageStatus } from "../../machine/messageStatusStateMachine.ts";
 import Decode from "../../components/Decode";
+import { ContactDTO } from "../../apis/crm/api.ts";
+import { useNavigate } from "react-router-dom";
+import { CustomerLocationType } from "../CreateCustomerPage/index.hook.ts";
+import { CreateProfessionalLocationType } from "../CreateProfessionalPage/index.hook.ts";
 
 export default function MessagePage() {
-  const { messageQuery, documentsQuery, download, onReplyClick } =
+  const { messageQuery, contactQuery, documentsQuery, download, onReplyClick } =
     useMessagePage();
   const [statusOpen, setStatusOpen] = useState(false);
   const [priorityOpen, setPriorityOpen] = useState(false);
@@ -54,7 +58,14 @@ export default function MessagePage() {
         />
       )}
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-        <Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            gap: 2,
+            flexWrap: "wrap",
+          }}
+        >
           <Button
             variant="outlined"
             endIcon={<Reply />}
@@ -62,7 +73,10 @@ export default function MessagePage() {
           >
             Reply
           </Button>
+
+          <DisplayMessageContact contact={contactQuery} />
         </Box>
+
         <Typography>Subject: {messageQuery.data.subject}</Typography>
         <Typography>Sender: {messageQuery.data.sender}</Typography>
         <Typography>Channel: {messageQuery.data.channel} </Typography>
@@ -155,5 +169,64 @@ function EmailDocuments({
         </Card>
       ))}
     </Stack>
+  );
+}
+
+function DisplayMessageContact({
+  contact,
+}: {
+  contact: UseQueryResult<ContactDTO, Error>;
+}) {
+  if (contact.isPending) return <CircularProgress />;
+
+  if (contact.isError)
+    return (
+      <Alert severity="error">
+        Cannot fetch the contact of the message: {contact.error.message}
+      </Alert>
+    );
+
+  return (
+    <>
+      {contact.data.category === "Unknown" ? (
+        <ConvertMessage contact={contact.data} />
+      ) : (
+        <MessageContactLink contact={contact.data} />
+      )}
+    </>
+  );
+}
+
+function MessageContactLink({ contact }: { contact: ContactDTO }) {
+  // TODO: get the professional/customer
+  return <></>;
+}
+
+function ConvertMessage({ contact }: { contact: ContactDTO }) {
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <Button
+        variant="outlined"
+        onClick={() =>
+          navigate("/ui/professionals/create", {
+            state: { contact, fromMessage: true },
+          } satisfies { state: CreateProfessionalLocationType })
+        }
+      >
+        Convert to a Professional
+      </Button>
+      <Button
+        variant="outlined"
+        onClick={() =>
+          navigate("/ui/customers/create", {
+            state: { contact, fromMessage: true },
+          } satisfies { state: CustomerLocationType })
+        }
+      >
+        Convert to a Customer
+      </Button>
+    </>
   );
 }

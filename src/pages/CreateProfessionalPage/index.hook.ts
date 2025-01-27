@@ -1,13 +1,15 @@
 import {
+  ContactDTO,
   CreateContactDTO,
   CreateProfessionalDTO,
   ProfessionalControllerApi,
+  ProfessionalDTO,
 } from "../../apis/crm/api.ts";
 import { useMutation } from "@tanstack/react-query";
 import { PROFESSIONAL_KEY } from "../../query/query-keys.ts";
 import useMultipleForm from "../../hooks/useMultipleForm.ts";
 import { BaseSyntheticEvent, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Location, useLocation, useNavigate } from "react-router-dom";
 
 export const ProfessionalFormStepsEnum = {
   Contact: "Contact",
@@ -34,12 +36,43 @@ const stepsWithLabels = Object.values(ProfessionalFormStepsEnum).map((s) => ({
   label: stepLabel(s),
 }));
 
+interface LocationState {
+  contact?: ContactDTO;
+  professional?: ProfessionalDTO;
+  fromMessage?: boolean;
+}
+
+interface LocationStatePresent extends LocationState {
+  contact: ContactDTO;
+  fromMessage: true;
+}
+
+interface LocationStateAbsent extends LocationState {
+  contact?: ContactDTO;
+  fromMessage?: false;
+}
+
+export type CreateProfessionalLocationType =
+  | LocationStatePresent
+  | LocationStateAbsent;
+
 export default function useCreateProfessionalPage() {
   const professionalApi = new ProfessionalControllerApi();
-  const [contact, setContact] = useState<CreateContactDTO | undefined>();
+  const { state }: Location<CreateProfessionalLocationType | null> =
+    useLocation();
+
+  const [contact, setContact] = useState<CreateContactDTO | undefined>(
+    state?.contact,
+  );
   const [professional, setProfessional] = useState<
     CreateProfessionalDTO | undefined
-  >();
+  >(
+    state?.professional && {
+      ...state.professional,
+      notes: state.professional.notes ?? "",
+      contactId: 0,
+    },
+  );
   const navigate = useNavigate();
 
   const mutation = useMutation({
@@ -50,9 +83,10 @@ export default function useCreateProfessionalPage() {
     mutationKey: [PROFESSIONAL_KEY],
   });
 
-  const steps = useMultipleForm<ProfessionalFormStepsEnum>(
-    Object.values(ProfessionalFormStepsEnum),
-  );
+  const steps = useMultipleForm<ProfessionalFormStepsEnum>({
+    elements: Object.values(ProfessionalFormStepsEnum),
+    firstState: state?.fromMessage ? "Professional" : undefined,
+  });
 
   async function onContactSubmit(
     contact: CreateContactDTO,
@@ -68,7 +102,13 @@ export default function useCreateProfessionalPage() {
     event?: BaseSyntheticEvent,
   ) {
     event?.preventDefault();
-    professional.contactInfo = contact;
+
+    if (state?.fromMessage) {
+      professional.contactId = state.contact.id;
+    } else {
+      professional.contactInfo = contact;
+    }
+
     setProfessional(professional);
     steps.nextStep();
   }
@@ -87,6 +127,8 @@ export default function useCreateProfessionalPage() {
   }
 
   function onProfessionalCancel() {
+    // Prevent change the contact when converting a message contact to a professional
+    if (state?.fromMessage) return navigate(-1);
     steps.prevStep();
   }
 
