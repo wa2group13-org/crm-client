@@ -15,11 +15,11 @@ export default function useMessageStatusDialog(
   const queryClient = useQueryClient();
 
   const messageStatusMutation = useMutation({
-    mutationKey: messageKey(message.id),
+    mutationKey: messageKey({ messageId: message.id }),
     mutationFn: (data: ChangeMessageStatusDTO) =>
       messageApi.changeMessageStatus(message.id, data).then((res) => res.data),
     onSuccess: async (data) => {
-      queryClient.setQueryData(messageKey(message.id), data);
+      queryClient.setQueryData(messageKey({ messageId: message.id }), data);
       await queryClient.invalidateQueries({
         queryKey: messageHistoryKey(message.id),
       });

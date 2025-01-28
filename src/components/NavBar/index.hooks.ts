@@ -36,6 +36,10 @@ export default function useNavBar() {
       label: "Messages",
       onClick: () => navigate("/ui/messages"),
     },
+    {
+      label: "Documents",
+      onClick: () => navigate("/ui/documents"),
+    },
   ];
 
   return { user, onLogin, pages, menuSettings };

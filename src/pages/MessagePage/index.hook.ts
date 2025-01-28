@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   contactKey,
   documentBlobKey,
-  documentsKey,
+  documentKey,
   messageKey,
 } from "../../query/query-keys.ts";
 import {
@@ -32,12 +32,12 @@ export default function useMessagePage() {
   const navigate = useNavigate();
 
   const messageQuery = useQuery({
-    queryKey: messageKey(messageId),
+    queryKey: messageKey({ messageId }),
     queryFn: () => messageApi.getMessageById(messageId).then((res) => res.data),
   });
 
   const documentsQuery = useQuery({
-    queryKey: documentsKey({ mailId: messageQuery.data?.mailId }),
+    queryKey: documentKey({ mailId: messageQuery.data?.mailId }),
     queryFn: async () =>
       !messageQuery.data?.mailId
         ? []

@@ -15,13 +15,13 @@ export default function useMessagePriorityDialog(
   const queryClient = useQueryClient();
 
   const messagePriorityMutation = useMutation({
-    mutationKey: messageKey(message.id),
+    mutationKey: messageKey({ messageId: message.id }),
     mutationFn: (data: ChangeMessagePriorityDTO) =>
       messageApi
         .changeMessagePriority(message.id, data)
         .then((res) => res.data),
     onSuccess: async (data) => {
-      queryClient.setQueryData(messageKey(message.id), data);
+      queryClient.setQueryData(messageKey({ messageId: message.id }), data);
       await queryClient.invalidateQueries({
         queryKey: messageHistoryKey(message.id),
       });

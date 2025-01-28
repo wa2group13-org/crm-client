@@ -1,0 +1,35 @@
+import { DocumentControllerApi } from "../../apis/document_store/api.ts";
+import { useQuery } from "@tanstack/react-query";
+import { useSearch } from "../../hooks/useSearch.ts";
+import { documentsKey } from "../../query/query-keys.ts";
+import { useEffect } from "react";
+
+export default function useDocumentsPage() {
+  const {
+    params: { page },
+    setParams,
+  } = useSearch({ page: 1 } as { page: number });
+  const documentApi = new DocumentControllerApi();
+
+  const limit = 10;
+
+  const documentsQuery = useQuery({
+    queryKey: documentsKey({ page, limit }),
+    queryFn: async () =>
+      documentApi.getAllDocuments(page - 1, limit).then((res) => res.data),
+  });
+
+  useEffect(() => {
+    if (
+      documentsQuery.data?.totalPages != null &&
+      documentsQuery.data.totalPages < page
+    )
+      setParams("page", documentsQuery.data.totalPages);
+  }, [documentsQuery.data]);
+
+  function setPage(page: number) {
+    setParams("page", page);
+  }
+
+  return { documentsQuery, page, limit, setPage };
+}

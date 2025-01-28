@@ -1,4 +1,4 @@
-import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import { useApp } from "./App.hooks.ts";
 import ProfessionalPage from "./pages/ProfessionalPage";
@@ -18,6 +18,8 @@ import JobOffersPage from "./pages/JobOffersPage";
 import MessagesPage from "./pages/MessagesPage";
 import MessagePage from "./pages/MessagePage";
 import MessageCreatePage from "./pages/MessageCreatePage";
+import DocumentsPage from "./pages/DocumentsPage";
+import DocumentPage from "./pages/DocumentPage";
 
 const queryClient = new QueryClient();
 
@@ -59,6 +61,11 @@ export function App() {
                   <Route
                     path="messages/create"
                     element={<MessageCreatePage />}
+                  />
+                  <Route path="documents" element={<DocumentsPage />} />
+                  <Route
+                    path="documents/:documentId"
+                    element={<DocumentPage />}
                   />
                 </Route>
               </Routes>

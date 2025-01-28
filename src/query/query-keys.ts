@@ -15,6 +15,8 @@ export const USER_KEY = "user_key";
 export const MESSAGES_KEY = "messages_key";
 export const MESSAGE_KEY = "message_key";
 export const DOCUMENTS_KEY = "documents_key";
+export const DOCUMENT_KEY = "document_key";
+export const DOCUMENT_VERSION_KEY = "document_version_key";
 export const DOCUMENT_BLOB_KEY = "document_blob_key";
 export const MESSAGE_HISTORY_KEY = "message_history_key";
 export const EMAIL_KEY = "email_key";
@@ -65,15 +67,26 @@ export function messagesKey(keys: {
   return [MESSAGES_KEY, keys];
 }
 
-export function messageKey(messageId: number | null) {
-  return [MESSAGE_KEY, messageId];
+export function messageKey(keys: { messageId?: number; mailId?: string }) {
+  return [MESSAGE_KEY, keys];
 }
 
-export function documentsKey(keys: { mailId?: string }) {
+export function documentsKey(keys: { page?: number; limit?: number }) {
   return [DOCUMENTS_KEY, keys];
 }
 
-export function documentBlobKey(keys: { documentId?: number }) {
+export function documentKey(keys: { documentId?: number; mailId?: string }) {
+  return [DOCUMENT_KEY, keys];
+}
+
+export function documentVersionKey(keys: { documentId?: number }) {
+  return [DOCUMENT_VERSION_KEY, keys];
+}
+
+export function documentBlobKey(keys: {
+  documentId?: number;
+  version?: number;
+}) {
   return [DOCUMENT_BLOB_KEY, keys];
 }
 

@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { professionalsKey } from "../../query/query-keys.ts";
 import { useSearch } from "../../hooks/useSearch.ts";
 import { useIsLogin } from "../../hooks/useIsLogin.ts";
+import { useEffect } from "react";
 
 export default function useProfessionalsPage() {
   const isLogin = useIsLogin();
@@ -68,6 +69,14 @@ export default function useProfessionalsPage() {
       return res.data;
     },
   });
+
+  useEffect(() => {
+    if (
+      professionals.data?.totalPages != null &&
+      professionals.data.totalPages < page
+    )
+      setParams("page", professionals.data.totalPages);
+  }, [professionals.data]);
 
   return {
     page,

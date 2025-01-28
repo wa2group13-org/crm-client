@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { customersKey } from "../../query/query-keys.ts";
 import { useIsLogin } from "../../hooks/useIsLogin.ts";
 import { useSearch } from "../../hooks/useSearch.ts";
+import { useEffect } from "react";
 
 export default function useCustomersPage() {
   const {
@@ -29,6 +30,11 @@ export default function useCustomersPage() {
       return res.data;
     },
   });
+
+  useEffect(() => {
+    if (customers.data?.totalPages != null && customers.data.totalPages < page)
+      setParams("page", customers.data.totalPages);
+  }, [customers.data]);
 
   function setPageState(page: number) {
     setParams("page", page);
