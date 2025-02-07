@@ -20,6 +20,7 @@ import MessagePage from "./pages/MessagePage";
 import MessageCreatePage from "./pages/MessageCreatePage";
 import DocumentsPage from "./pages/DocumentsPage";
 import DocumentPage from "./pages/DocumentPage";
+import DocumentCreatePage from "./pages/DocumentCreatePage";
 
 const queryClient = new QueryClient();
 
@@ -66,6 +67,10 @@ export function App() {
                   <Route
                     path="documents/:documentId"
                     element={<DocumentPage />}
+                  />
+                  <Route
+                    path="documents/create"
+                    element={<DocumentCreatePage />}
                   />
                 </Route>
               </Routes>

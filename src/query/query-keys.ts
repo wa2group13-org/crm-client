@@ -16,6 +16,7 @@ export const MESSAGES_KEY = "messages_key";
 export const MESSAGE_KEY = "message_key";
 export const DOCUMENTS_KEY = "documents_key";
 export const DOCUMENT_KEY = "document_key";
+export const DOCUMENT_DATA_KEY = "document_data_key";
 export const DOCUMENT_VERSION_KEY = "document_version_key";
 export const DOCUMENT_BLOB_KEY = "document_blob_key";
 export const MESSAGE_HISTORY_KEY = "message_history_key";
@@ -77,6 +78,10 @@ export function documentsKey(keys: { page?: number; limit?: number }) {
 
 export function documentKey(keys: { documentId?: number; mailId?: string }) {
   return [DOCUMENT_KEY, keys];
+}
+
+export function documentDataKey(keys: { documentMetadataId?: number }) {
+  return [DOCUMENT_DATA_KEY, keys];
 }
 
 export function documentVersionKey(keys: { documentId?: number }) {
