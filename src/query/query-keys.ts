@@ -2,6 +2,7 @@ import {
   CustomerFilters,
   GetMessagesFilterByStateEnum,
   GetMessagesSortByEnum,
+  JobOfferFilters,
   ProfessionalFilters,
 } from "../apis/crm/api.ts";
 
@@ -47,7 +48,11 @@ export function customerKey(customerId: number | null) {
   return [CUSTOMER_KEY, customerId];
 }
 
-export function jobOffersKey(keys: { page?: number; limit?: number }) {
+export function jobOffersKey(keys: {
+  page?: number;
+  limit?: number;
+  filters?: JobOfferFilters;
+}) {
   return [JOB_OFFERS_KEY, keys];
 }
 

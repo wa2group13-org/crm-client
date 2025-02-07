@@ -12,6 +12,10 @@ export function useSearch<P extends Record<string, S>, S>(params: P) {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
+  /**
+   * Set the parameters from the default value. Must be done
+   * in a useEffect.
+   */
   useEffect(() => {
     setSearchParams((prev) => {
       const curr = [...prev.entries()];

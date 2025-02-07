@@ -43,6 +43,7 @@ export default function ProfessionalFiltersForm({
               select={true}
               label="byEmploymentState"
               placeholder="byEmploymentState"
+              fullWidth
             >
               <MenuItem value="">None</MenuItem>
               {Object.values(ProfessionalFiltersByEmploymentStateEnum).map(
@@ -71,6 +72,7 @@ export default function ProfessionalFiltersForm({
                 disabled={disabled}
                 multiple
                 freeSolo
+                fullWidth
                 renderInput={(params) => (
                   <TextField
                     {...params}
