@@ -39,10 +39,13 @@ export default function ProfessionalItem({
             </Typography>
           </Box>
 
-          <SkillsList
-            skills={professional.skills}
-            style={{ display: "flex", flexWrap: "wrap", gap: 2 }}
-          />
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <Typography>Skills: </Typography>
+            <SkillsList
+              skills={professional.skills}
+              style={{ display: "flex", flexWrap: "wrap", gap: 2 }}
+            />
+          </Box>
         </Box>
       </Box>
     </Box>

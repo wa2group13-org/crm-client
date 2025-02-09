@@ -1,5 +1,4 @@
 import { createTheme } from "@mui/material";
-import {} from "@mui/material/colors";
 
 export const crmTheme = createTheme({
   palette: {
@@ -26,6 +25,11 @@ export const crmTheme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {},
+      },
+    },
+    MuiLink: {
+      defaultProps: {
+        target: "_blank",
       },
     },
   },

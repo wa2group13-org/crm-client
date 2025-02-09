@@ -223,7 +223,7 @@ function ProfileAvatar({
 
         <form method={"post"} action={user.logoutUrl}>
           <input type={"hidden"} name={"_csrf"} value={user.xsrfToken} />
-          <MenuItem component="button" type="submit">
+          <MenuItem component="button" type="submit" sx={{ width: "100%" }}>
             Logout
           </MenuItem>
         </form>

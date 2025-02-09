@@ -30,7 +30,7 @@ export default function ProfessionalsPage() {
 
   return (
     <Container>
-      <Box sx={{ display: "flex", mb: 2 }}>
+      <Box sx={{ display: "flex", mb: 2, gap: 2 }}>
         <Typography variant="h3" sx={{ flexGrow: 1 }}>
           Professionals
         </Typography>
