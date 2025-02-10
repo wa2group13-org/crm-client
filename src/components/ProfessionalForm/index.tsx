@@ -104,6 +104,7 @@ export default function ProfessionalForm({
                 error={!!errors.employmentState}
                 helperText={errors.employmentState?.message}
                 fullWidth={true}
+                disabled
               >
                 {Object.values(CreateProfessionalDTOEmploymentStateEnum).map(
                   (state) => (

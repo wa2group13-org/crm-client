@@ -42,6 +42,10 @@ export function App() {
                     element={<ProfessionalPage />}
                   />
                   <Route
+                    path="professionals/:professionalId/update"
+                    element={<CreateProfessionalPage />}
+                  />
+                  <Route
                     path="professionals/create"
                     element={<CreateProfessionalPage />}
                   />

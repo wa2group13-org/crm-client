@@ -1,4 +1,5 @@
 import {
+  ContactControllerApi,
   ContactDTO,
   CreateContactDTO,
   CreateProfessionalDTO,
@@ -6,7 +7,11 @@ import {
   ProfessionalDTO,
 } from "../../apis/crm/api.ts";
 import { useMutation } from "@tanstack/react-query";
-import { PROFESSIONAL_KEY } from "../../query/query-keys.ts";
+import {
+  contactKey,
+  PROFESSIONAL_KEY,
+  professionalKey,
+} from "../../query/query-keys.ts";
 import useMultipleForm from "../../hooks/useMultipleForm.ts";
 import { BaseSyntheticEvent, useState } from "react";
 import { Location, useLocation, useNavigate } from "react-router-dom";
@@ -40,24 +45,28 @@ interface LocationState {
   contact?: ContactDTO;
   professional?: ProfessionalDTO;
   fromMessage?: boolean;
+  update?: boolean;
 }
 
-interface LocationStatePresent extends LocationState {
+interface LocationFromMessage extends LocationState {
   contact: ContactDTO;
   fromMessage: true;
+  update?: false;
 }
 
-interface LocationStateAbsent extends LocationState {
-  contact?: ContactDTO;
-  fromMessage?: false;
+interface LocationUpdate extends LocationState {
+  contact: ContactDTO;
+  professional: ProfessionalDTO;
+  update: true;
 }
 
 export type CreateProfessionalLocationType =
-  | LocationStatePresent
-  | LocationStateAbsent;
+  | LocationFromMessage
+  | LocationUpdate;
 
 export default function useCreateProfessionalPage() {
   const professionalApi = new ProfessionalControllerApi();
+  const contactApi = new ContactControllerApi();
   const { state }: Location<CreateProfessionalLocationType | null> =
     useLocation();
 
@@ -81,6 +90,25 @@ export default function useCreateProfessionalPage() {
       return res.data;
     },
     mutationKey: [PROFESSIONAL_KEY],
+  });
+
+  const updateContact = useMutation({
+    mutationKey: contactKey({ contactId: state?.contact?.id }),
+    mutationFn: (data: { contactId: number; contact: CreateContactDTO }) =>
+      contactApi
+        .updateContact(data.contactId, data.contact)
+        .then((res) => res.data),
+  });
+
+  const updateProfessional = useMutation({
+    mutationKey: professionalKey(state?.professional?.id ?? null),
+    mutationFn: (data: {
+      professionalId: number;
+      professional: CreateProfessionalDTO;
+    }) =>
+      professionalApi
+        .updateProfessional(data.professionalId, data.professional)
+        .then((res) => res.data),
   });
 
   const steps = useMultipleForm<ProfessionalFormStepsEnum>({
@@ -115,8 +143,19 @@ export default function useCreateProfessionalPage() {
 
   async function onReviewSubmit() {
     if (!professional) return;
+    if (!contact) return;
 
-    await mutation.mutateAsync(professional);
+    if (state?.update) {
+      await Promise.all([
+        updateContact.mutateAsync({ contactId: state.contact.id, contact }),
+        updateProfessional.mutateAsync({
+          professionalId: state.professional.id,
+          professional,
+        }),
+      ]);
+    } else {
+      await mutation.mutateAsync(professional);
+    }
 
     // When finished go to the previous page.
     navigate(-1);
@@ -138,6 +177,11 @@ export default function useCreateProfessionalPage() {
 
   return {
     mutation,
+    isPending:
+      mutation.isPending ||
+      updateContact.isPending ||
+      updateProfessional.isPending,
+    error: mutation.error || updateContact.error || updateProfessional.error,
     contact,
     professional,
     currentStep: steps.current,

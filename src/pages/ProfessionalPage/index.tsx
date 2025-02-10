@@ -1,11 +1,19 @@
 import PersonalInformation from "../../components/PersonalInformation";
 import ProfessionalInformation from "../../components/ProfessionalInformation";
-import { Alert, Card, CardContent, Container, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Container,
+  Typography,
+} from "@mui/material";
 import Loading from "../../components/Loading";
 import useProfessionalPage from "./index.hooks.ts";
 
 export default function ProfessionalPage() {
-  const { professional } = useProfessionalPage();
+  const { professional, isLogin, onUpdateClick } = useProfessionalPage();
 
   if (professional.isPending) return <Loading />;
 
@@ -16,7 +24,17 @@ export default function ProfessionalPage() {
     <Container>
       <Card sx={{ borderRadius: 4, p: 2 }}>
         <CardContent>
-          <Typography variant="h4">Professional information</Typography>
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <Typography variant="h4">Professional information</Typography>
+            {isLogin && (
+              <Button
+                variant="outlined"
+                onClick={() => onUpdateClick(professional.data)}
+              >
+                Update information
+              </Button>
+            )}
+          </Box>
           <ProfessionalInformation professional={professional.data} />
 
           <Typography variant="h4" sx={{ mt: 4 }}>

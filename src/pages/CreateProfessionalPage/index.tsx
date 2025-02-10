@@ -13,6 +13,8 @@ export default function CreateProfessionalPage() {
     contact,
     professional,
     mutation,
+    isPending,
+    error,
     onContactSubmit,
     onContactCancel,
     onProfessionalSubmit,
@@ -50,8 +52,8 @@ export default function CreateProfessionalPage() {
           <ProfessionalReview
             professional={professional}
             contact={contact}
-            isLoading={mutation.isPending}
-            error={mutation.error}
+            isLoading={isPending}
+            error={error}
             onSubmit={onReviewSubmit}
             onCancel={onReviewCancel}
           />
