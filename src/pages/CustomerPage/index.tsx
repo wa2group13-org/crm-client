@@ -15,7 +15,7 @@ import CustomerJobOfferInformation from "../../components/CustomerJobOfferInform
 import { Add } from "@mui/icons-material";
 
 export default function CustomerPage() {
-  const { customer, onJobOfferClick, onJobOfferAdd, isLogin } =
+  const { customer, onJobOfferClick, onJobOfferAdd, isLogin, onUpdateClick } =
     useCustomerPage();
 
   if (customer.isPending) return <Loading />;
@@ -27,7 +27,17 @@ export default function CustomerPage() {
     <Container>
       <Card sx={{ borderRadius: 4, p: 2 }}>
         <CardContent>
-          <Typography variant="h4">Customer information</Typography>
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <Typography variant="h4">Customer information</Typography>
+            {isLogin && (
+              <Button
+                onClick={() => onUpdateClick(customer.data)}
+                variant="outlined"
+              >
+                Update information
+              </Button>
+            )}
+          </Box>
           <CustomerInformation customer={customer.data} />
 
           <Typography variant="h4" sx={{ mt: 4 }}>

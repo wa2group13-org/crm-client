@@ -13,6 +13,8 @@ export default function CreateCustomerPage() {
     contact,
     customer,
     mutation,
+    isPending,
+    error,
     onContactSubmit,
     onContactCancel,
     onCustomerSubmit,
@@ -54,8 +56,8 @@ export default function CreateCustomerPage() {
                 throw Error("Some customer information is missing!");
               })()
             }
-            isLoading={mutation.isPending}
-            error={mutation.error}
+            isLoading={isPending}
+            error={error}
             onSubmit={onReviewSubmit}
             onCancel={onReviewCancel}
           />

@@ -21,6 +21,7 @@ import MessageCreatePage from "./pages/MessageCreatePage";
 import DocumentsPage from "./pages/DocumentsPage";
 import DocumentPage from "./pages/DocumentPage";
 import DocumentCreatePage from "./pages/DocumentCreatePage";
+import Page404 from "./pages/Page404";
 
 const queryClient = new QueryClient();
 
@@ -50,6 +51,10 @@ export function App() {
                     element={<CustomerPage />}
                   />
                   <Route
+                    path="customers/:customerId/update"
+                    element={<CreateCustomerPage />}
+                  />
+                  <Route
                     path="customers/create"
                     element={<CreateCustomerPage />}
                   />
@@ -72,6 +77,7 @@ export function App() {
                     path="documents/create"
                     element={<DocumentCreatePage />}
                   />
+                  <Route path="*" element={<Page404 />} />
                 </Route>
               </Routes>
             </Router>

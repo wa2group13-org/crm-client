@@ -1,4 +1,5 @@
 import {
+  ContactControllerApi,
   ContactDTO,
   CreateContactDTO,
   CreateCustomerDTO,
@@ -8,7 +9,7 @@ import {
 import { BaseSyntheticEvent, useState } from "react";
 import { Location, useLocation, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import { customerKey } from "../../query/query-keys.ts";
+import { contactKey, customerKey } from "../../query/query-keys.ts";
 import useMultipleForm from "../../hooks/useMultipleForm.ts";
 
 const CustomerFormStepsEnum = {
@@ -40,21 +41,25 @@ interface LocationState {
   contact?: ContactDTO;
   customer?: CustomerDTO;
   fromMessage?: boolean;
+  update?: boolean;
 }
 
-interface LocationStatePresent extends LocationState {
+interface LocationFromMessage extends LocationState {
   contact: ContactDTO;
   fromMessage: true;
+  update?: false;
 }
 
-interface LocationStateAbsent extends LocationState {
-  contact?: ContactDTO;
-  fromMessage?: false;
+interface LocationUpdate extends LocationState {
+  contact: ContactDTO;
+  customer: CustomerDTO;
+  update: true;
 }
 
-export type CustomerLocationType = LocationStatePresent | LocationStateAbsent;
+export type CustomerLocationType = LocationFromMessage | LocationUpdate;
 
 export default function useCreateCustomerPage() {
+  const contactApi = new ContactControllerApi();
   const customerApi = new CustomerControllerApi();
   const { state }: Location<CustomerLocationType | null> = useLocation();
 
@@ -70,9 +75,25 @@ export default function useCreateCustomerPage() {
   const navigate = useNavigate();
 
   const mutation = useMutation({
+    mutationKey: customerKey(null),
     mutationFn: async (data: CreateCustomerDTO) =>
       customerApi.createCustomer(data).then((res) => res.data),
-    mutationKey: customerKey(null),
+  });
+
+  const updateContact = useMutation({
+    mutationKey: contactKey({ contactId: state?.contact?.id }),
+    mutationFn: (data: { contactId: number; contact: CreateContactDTO }) =>
+      contactApi
+        .updateContact(data.contactId, data.contact)
+        .then((res) => res.data),
+  });
+
+  const updateCustomer = useMutation({
+    mutationKey: customerKey(state?.customer?.id ?? null),
+    mutationFn: (data: { customerId: number; customer: CreateCustomerDTO }) =>
+      customerApi
+        .updateCustomerNote(data.customerId, { note: data.customer.note })
+        .then((res) => res.data),
   });
 
   const steps = useMultipleForm<CustomerFormStepsEnum>({
@@ -107,8 +128,16 @@ export default function useCreateCustomerPage() {
 
   async function onReviewSubmit() {
     if (!customer) return;
+    if (!contact) return;
 
-    await mutation.mutateAsync(customer);
+    if (state?.update) {
+      await Promise.all([
+        updateContact.mutateAsync({ contactId: state.contact.id, contact }),
+        updateCustomer.mutateAsync({ customerId: state.customer.id, customer }),
+      ]);
+    } else {
+      await mutation.mutateAsync(customer);
+    }
 
     // When finished go to the previous page.
     navigate(-1);
@@ -130,6 +159,9 @@ export default function useCreateCustomerPage() {
 
   return {
     mutation,
+    isPending:
+      mutation.isPending || updateCustomer.isPending || updateContact.isPending,
+    error: mutation.error || updateCustomer.error || updateContact.error,
     contact,
     customer,
     currentStep: steps.current,
