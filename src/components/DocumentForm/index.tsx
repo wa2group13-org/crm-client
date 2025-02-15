@@ -2,7 +2,6 @@ import useDocumentForm from "./index.hook.ts";
 import { Box, Button, CircularProgress, Divider } from "@mui/material";
 import ErrorText from "../ErrorText";
 import { DocumentAddType } from "../../pages/DocumentCreatePage/index.hook.ts";
-import { useUser } from "../../contexts/userContext.tsx";
 
 export default function DocumentForm({
   onSubmit,
@@ -15,7 +14,6 @@ export default function DocumentForm({
   error?: Error | null;
   onCancel?: () => void;
 }) {
-  const user = useUser();
   const { onSubmit: newOnSubmit, setFile } = useDocumentForm(onSubmit);
 
   return (

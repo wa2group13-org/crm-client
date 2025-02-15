@@ -1,4 +1,3 @@
-import { DocumentControllerApi } from "../../apis/document_store/api.ts";
 import { useMutation } from "@tanstack/react-query";
 import { documentDataKey } from "../../query/query-keys.ts";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +8,7 @@ export type DocumentAddType = {
 };
 
 export default function useDocumentCreatePage() {
-  const documentApi = new DocumentControllerApi();
+  // const documentApi = new DocumentControllerApi();
 
   const navigate = useNavigate();
 

@@ -199,7 +199,7 @@ function DisplayMessageContact({
 
 function MessageContactLink({ contact }: { contact: ContactDTO }) {
   // TODO: get the professional/customer
-  return <></>;
+  return <>{contact.id}</>;
 }
 
 function ConvertMessage({ contact }: { contact: ContactDTO }) {
