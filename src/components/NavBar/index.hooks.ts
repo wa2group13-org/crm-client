@@ -40,6 +40,10 @@ export default function useNavBar() {
       label: "Documents",
       onClick: () => navigate("/ui/documents"),
     },
+    {
+      label: "Analytics",
+      onClick: () => navigate("/ui/analytics"),
+    },
   ];
 
   return { user, onLogin, pages, menuSettings };

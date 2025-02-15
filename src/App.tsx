@@ -22,6 +22,7 @@ import DocumentsPage from "./pages/DocumentsPage";
 import DocumentPage from "./pages/DocumentPage";
 import DocumentCreatePage from "./pages/DocumentCreatePage";
 import Page404 from "./pages/Page404";
+import AnalyticsPage from "./pages/AnalyticsPage";
 
 const queryClient = new QueryClient();
 
@@ -81,6 +82,7 @@ export function App() {
                     path="documents/create"
                     element={<DocumentCreatePage />}
                   />
+                  <Route path="analytics" element={<AnalyticsPage />} />
                   <Route path="*" element={<Page404 />} />
                 </Route>
               </Routes>
