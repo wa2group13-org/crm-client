@@ -15,6 +15,19 @@ on:
       - 'v*'
 
 jobs:
+  publish-release:
+    needs: push_to_registry
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Releasing
+        uses: ncipollo/release-action@v1
+        with:
+          generateReleaseNotes: true
+
   push_to_registry:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
