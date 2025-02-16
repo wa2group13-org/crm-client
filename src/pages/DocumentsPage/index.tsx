@@ -2,6 +2,7 @@ import useDocumentsPage from "./index.hook.ts";
 import {
   Alert,
   Box,
+  Button,
   Container,
   List,
   ListItemButton,
@@ -13,7 +14,7 @@ import DocumentListItem from "../../components/DocumentListItem";
 import { useNavigate } from "react-router-dom";
 
 export default function DocumentsPage() {
-  const { documentsQuery, page, setPage } = useDocumentsPage();
+  const { documentsQuery, page, setPage, onAddClick } = useDocumentsPage();
   const navigate = useNavigate();
 
   if (documentsQuery.isPending) return <Loading />;
@@ -29,8 +30,12 @@ export default function DocumentsPage() {
     <Container>
       <Box sx={{ display: "flex", mb: 2 }}>
         <Typography variant="h3" sx={{ flexGrow: 1 }}>
-          Messages
+          Documents
         </Typography>
+
+        <Button variant="contained" sx={{ flexGrow: 0 }} onClick={onAddClick}>
+          Add document
+        </Button>
       </Box>
 
       <List sx={{ width: "100%" }}>

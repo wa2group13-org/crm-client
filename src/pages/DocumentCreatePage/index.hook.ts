@@ -16,7 +16,7 @@ export default function useDocumentCreatePage() {
     mutationKey: documentDataKey({}),
     mutationFn: async (data: FormData) =>
       axios
-        .post(`http://localhost:8080/document_store/API/documents`, data, {
+        .post(`/document_store/API/documents`, data, {
           headers: {
             "Content-Type": undefined,
           },

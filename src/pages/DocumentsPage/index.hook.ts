@@ -3,12 +3,14 @@ import { useQuery } from "@tanstack/react-query";
 import { useSearch } from "../../hooks/useSearch.ts";
 import { documentsKey } from "../../query/query-keys.ts";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function useDocumentsPage() {
   const {
     params: { page },
     setParams,
   } = useSearch({ page: 0 } as { page: number });
+  const navigate = useNavigate();
   const documentApi = new DocumentControllerApi();
 
   const limit = 10;
@@ -31,5 +33,9 @@ export default function useDocumentsPage() {
     setParams("page", page - 1);
   }
 
-  return { documentsQuery, page: page + 1, limit, setPage };
+  function onAddClick() {
+    navigate(`/ui/documents/create`);
+  }
+
+  return { documentsQuery, page: page + 1, limit, setPage, onAddClick };
 }
