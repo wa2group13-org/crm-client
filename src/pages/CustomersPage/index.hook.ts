@@ -13,7 +13,7 @@ export default function useCustomersPage() {
   const {
     params: { page, filters },
     setParams,
-  } = useSearch({ page: 1, filters: {} } as {
+  } = useSearch({ page: 0, filters: {} } as {
     page: number;
     filters: CustomerFilters;
   });
@@ -26,7 +26,7 @@ export default function useCustomersPage() {
   const customers = useQuery({
     queryKey: customersKey({ page, limit, filters }),
     queryFn: async () => {
-      const res = await customerApi.getCustomers(page - 1, limit, filters);
+      const res = await customerApi.getCustomers(page, limit, filters);
       return res.data;
     },
   });
@@ -37,7 +37,7 @@ export default function useCustomersPage() {
   }, [customers.data]);
 
   function setPageState(page: number) {
-    setParams("page", page);
+    setParams("page", page - 1);
   }
 
   function setFilters(filters: CustomerFilters) {
@@ -62,7 +62,7 @@ export default function useCustomersPage() {
   }
 
   return {
-    page,
+    page: page + 1,
     setPage: setPageState,
     limit,
     customers,

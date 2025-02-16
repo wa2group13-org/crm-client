@@ -8,7 +8,7 @@ export default function useJobOffersPage() {
   const {
     params: { page, filters },
     setParams,
-  } = useSearch({ page: 1, filters: {} } as {
+  } = useSearch({ page: 0, filters: {} } as {
     page: number;
     filters: JobOfferFilters;
   });
@@ -19,10 +19,10 @@ export default function useJobOffersPage() {
 
   // Fetch customers from the server
   const jobOffers = useQuery({
-    queryKey: jobOffersKey({ page: page - 1, limit, filters }),
+    queryKey: jobOffersKey({ page, limit, filters }),
     queryFn: async () => {
       const res = await jobOfferApi.getJobOffers({
-        page: page - 1,
+        page,
         limit,
         filters,
       });
@@ -31,7 +31,7 @@ export default function useJobOffersPage() {
   });
 
   function setPageState(page: number) {
-    setParams("page", page);
+    setParams("page", page - 1);
   }
 
   function setFilters(filters: JobOfferFilters) {
@@ -43,7 +43,7 @@ export default function useJobOffersPage() {
   }
 
   return {
-    page,
+    page: page + 1,
     setPage: setPageState,
     limit,
     jobOffers,

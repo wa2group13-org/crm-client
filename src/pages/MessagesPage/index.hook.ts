@@ -10,7 +10,7 @@ export default function useMessagesPage() {
   const {
     params: { page, sortBy },
     setParams,
-  } = useSearch({ page: 1, sortBy: GetMessagesSortByEnum.DateDesc } as {
+  } = useSearch({ page: 0, sortBy: GetMessagesSortByEnum.DateDesc } as {
     page: number;
     sortBy: GetMessagesSortByEnum;
   });
@@ -19,13 +19,13 @@ export default function useMessagesPage() {
   const limit = 10;
 
   const messagesQuery = useQuery({
-    queryKey: messagesKey({ page: page - 1, limit, sortBy }),
+    queryKey: messagesKey({ page, limit, sortBy }),
     queryFn: () =>
-      messageApi.getMessages(page - 1, limit, sortBy).then((res) => res.data),
+      messageApi.getMessages(page, limit, sortBy).then((res) => res.data),
   });
 
   function setPageParam(page: number) {
-    setParams("page", page);
+    setParams("page", page - 1);
   }
 
   function setSortBy(sort: GetMessagesSortByEnum) {
@@ -34,7 +34,7 @@ export default function useMessagesPage() {
 
   return {
     messagesQuery,
-    page,
+    page: page + 1,
     limit,
     sortBy,
     setSortBy,

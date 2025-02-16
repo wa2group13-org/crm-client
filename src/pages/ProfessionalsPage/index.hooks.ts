@@ -14,7 +14,7 @@ export default function useProfessionalsPage() {
   const {
     params: { page, filters },
     setParams,
-  } = useSearch({ page: 1, filters: {} } as {
+  } = useSearch({ page: 0, filters: {} } as {
     page: number;
     filters: ProfessionalFilters;
   });
@@ -23,7 +23,7 @@ export default function useProfessionalsPage() {
   const limit = 10;
 
   function setPageState(page: number) {
-    setParams("page", page);
+    setParams("page", page - 1);
   }
 
   function setFilters(filters: ProfessionalFilters) {
@@ -55,13 +55,9 @@ export default function useProfessionalsPage() {
 
   // Fetch professionals from the server
   const professionals = useQuery({
-    queryKey: professionalsKey({ page: page - 1, limit, filters }),
+    queryKey: professionalsKey({ page, limit, filters }),
     queryFn: async () => {
-      const res = await professionalApi.getProfessionals(
-        page - 1,
-        limit,
-        filters,
-      );
+      const res = await professionalApi.getProfessionals(page, limit, filters);
       // Too bad JSON only has arrays, from the web request the skills
       // need to be cast again to a `Set`, this is because the field
       // is an array :(
@@ -79,7 +75,7 @@ export default function useProfessionalsPage() {
   }, [professionals.data]);
 
   return {
-    page,
+    page: page + 1,
     setPage: setPageState,
     limit,
     professionals,

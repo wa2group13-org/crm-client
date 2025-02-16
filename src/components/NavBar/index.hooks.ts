@@ -2,9 +2,11 @@
 
 import { useUser } from "../../contexts/userContext.tsx";
 import { useNavigate } from "react-router-dom";
+import { useRole } from "../../hooks/useRole.ts";
 
 export default function useNavBar() {
   const user = useUser();
+  const roles = useRole();
   const navigate = useNavigate();
 
   function onLogin() {
@@ -31,18 +33,22 @@ export default function useNavBar() {
     {
       label: "Profile",
       onClick: () => navigate("/ui/profile"),
+      enabled: true,
     },
     {
       label: "Messages",
       onClick: () => navigate("/ui/messages"),
+      enabled: true,
     },
     {
       label: "Documents",
       onClick: () => navigate("/ui/documents"),
+      enabled: true,
     },
     {
       label: "Analytics",
       onClick: () => navigate("/ui/analytics"),
+      enabled: roles?.includes("ADMIN"),
     },
   ];
 

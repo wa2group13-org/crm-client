@@ -169,7 +169,7 @@ function ProfileAvatar({
   settings,
   user,
 }: {
-  settings: { label: string; onClick: () => void }[];
+  settings: { label: string; onClick: () => void; enabled?: boolean }[];
   user: UserDTO;
 }) {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -212,6 +212,7 @@ function ProfileAvatar({
               setting.onClick();
               handleCloseUserMenu();
             }}
+            disabled={!setting.enabled}
           >
             <Typography sx={{ textAlign: "center" }}>
               {setting.label}

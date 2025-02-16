@@ -8,7 +8,7 @@ export default function useDocumentsPage() {
   const {
     params: { page },
     setParams,
-  } = useSearch({ page: 1 } as { page: number });
+  } = useSearch({ page: 0 } as { page: number });
   const documentApi = new DocumentControllerApi();
 
   const limit = 10;
@@ -16,7 +16,7 @@ export default function useDocumentsPage() {
   const documentsQuery = useQuery({
     queryKey: documentsKey({ page, limit }),
     queryFn: async () =>
-      documentApi.getAllDocuments(page - 1, limit).then((res) => res.data),
+      documentApi.getAllDocuments(page, limit).then((res) => res.data),
   });
 
   useEffect(() => {
@@ -28,8 +28,8 @@ export default function useDocumentsPage() {
   }, [documentsQuery.data]);
 
   function setPage(page: number) {
-    setParams("page", page);
+    setParams("page", page - 1);
   }
 
-  return { documentsQuery, page, limit, setPage };
+  return { documentsQuery, page: page + 1, limit, setPage };
 }
