@@ -23,6 +23,7 @@ import DocumentPage from "./pages/DocumentPage";
 import DocumentCreatePage from "./pages/DocumentCreatePage";
 import Page404 from "./pages/Page404";
 import AnalyticsPage from "./pages/AnalyticsPage";
+import LandingPage from "./pages/LandingPage";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ export function App() {
             <Router>
               <Routes>
                 <Route path="/ui" element={<HomePage />}>
+                  <Route index element={<LandingPage />} />
                   <Route path="professionals" element={<ProfessionalsPage />} />
                   <Route
                     path="professionals/:professionalId"

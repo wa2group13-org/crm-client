@@ -79,7 +79,7 @@ export default function useCreateProfessionalPage() {
     state?.professional && {
       ...state.professional,
       notes: state.professional.notes ?? "",
-      contactId: 0,
+      contactId: state.contact.id,
     },
   );
   const navigate = useNavigate();
